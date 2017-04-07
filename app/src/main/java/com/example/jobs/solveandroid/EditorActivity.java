@@ -5,11 +5,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.example.jobs.solveandroid.editor.JavaGenerator;
+import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
 
 public class EditorActivity extends AppCompatActivity {
+
+    private JavaGenerator javaGenerator = new JavaGenerator("Main");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +25,20 @@ public class EditorActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final TextView textView = (TextView) findViewById(R.id.contentView);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+
+                String content = javaGenerator.toString();
+                PrettifyHighlighter highlighter = new PrettifyHighlighter();
+                String highlighted = highlighter.highlight("java", content).replace("\n", "<br/>");
+                textView.setText(Html.fromHtml(highlighted));
             }
         });
     }

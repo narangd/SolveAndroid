@@ -17,12 +17,12 @@ public class JavaGenerator {
 
     @Override
     public final String toString() {
-        return "public class " + title + " {\n" +
-                " public static void main(String[] args) {\n" +
-                "  /** main */\n" +
+        return "public class " + title + " {\r\n" +
+                " public static void main(String[] args) {\r\n" +
+                "  /** main */\r\n" +
                 variable +
                 command +
-                " }\n" +
+                " }\r\n" +
                 "}";
     }
 }

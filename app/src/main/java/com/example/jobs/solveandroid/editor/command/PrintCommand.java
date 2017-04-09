@@ -1,6 +1,6 @@
 package com.example.jobs.solveandroid.editor.command;
 
-import com.example.jobs.solveandroid.editor.Variable;
+import com.example.jobs.solveandroid.editor.component.Variable;
 
 /**
  * @author sykim

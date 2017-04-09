@@ -20,15 +20,18 @@
         tools:showIn="@layout/activity_editor"
         tools:context="com.example.jobs.solveandroid.EditorActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/originalView"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:id="@+id/recycler_view"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="Hello World!"
+            android:background="@color/darcula_editor_background"
             android:id="@+id/contentView"/>
 
     </LinearLayout>

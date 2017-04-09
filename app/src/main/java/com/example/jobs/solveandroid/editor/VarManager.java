@@ -1,5 +1,8 @@
 package com.example.jobs.solveandroid.editor;
 
+import com.example.jobs.solveandroid.editor.component.Variable;
+
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -7,42 +10,14 @@ import java.util.HashMap;
  * @date 2017. 04. 06
  */
 public class VarManager {
-    private HashMap<String, Variable> variables = new HashMap<>();
-
-    public void add(String name, byte value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, int value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, long value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, char value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, String value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, float value) {
-        variables.put(name, new Variable(name, value));
-    }
-
-    public void add(String name, double value) {
-        variables.put(name, new Variable(name, value));
-    }
+    public final HashMap<String, Variable> variables = new HashMap<>();
 
     public void remove(String name) {
         variables.remove(name);
     }
 
-    public Variable get(String name) {
-        return variables.get(name);
+    public Collection<Variable> getNames() {
+        return variables.values();
     }
 
     public String definition() {
@@ -53,24 +28,7 @@ public class VarManager {
                     .append("  ")
                     .append(variable.type)
                     .append(" ")
-                    .append(name)
-                    .append(" = ")
-                    .append(variable)
-                    .append(";\n");
-        }
-        return stringBuilder.toString();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String name : variables.keySet()) {
-            Variable variable = variables.get(name);
-            stringBuilder
-                    .append("  ")
-                    .append(variable.type)
-                    .append(" ")
-                    .append(name)
+                    .append(variable.name)
                     .append(" = ")
                     .append(variable)
                     .append(";\n");

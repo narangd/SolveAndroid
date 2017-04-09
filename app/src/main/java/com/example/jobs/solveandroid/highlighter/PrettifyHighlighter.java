@@ -1,5 +1,7 @@
 package com.example.jobs.solveandroid.highlighter;
 
+import android.graphics.Color;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +39,12 @@ public class PrettifyHighlighter {
     private static Map<String, String> buildColorsMap() {
         Map<String, String> map = new HashMap<>();
         map.put("typ", "87cefa");
-        map.put("kwd", "00ff00");
+        map.put("kwd", "CC7832");
         map.put("lit", "ffff00");
-        map.put("com", "999999");
-        map.put("str", "ff4500");
-        map.put("pun", "aaaaaa");
-        map.put("pln", "bbbbbb");
+        map.put("com", "808080");
+        map.put("str", "008000");
+        map.put("pun", "E8BF6A");
+        map.put("pln", "A9B7C6");
         return map;
     }
 }

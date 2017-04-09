@@ -1,15 +1,13 @@
 package com.example.jobs.solveandroid;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -18,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
+import com.example.jobs.solveandroid.editor.component.Variable;
 import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
 
 import java.util.StringTokenizer;
@@ -32,27 +32,40 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        javaGenerator.addLocalVariable("name", "김성용");
+        javaGenerator.addLocalVariable("count", 10);
+        for (Variable variable : javaGenerator.getVariables()) {
+            javaGenerator.command.print(variable);
+        }
+        Log.i("Log", "onCreate: " + javaGenerator.toString());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final TextView contentView = (TextView) findViewById(R.id.contentView);
-        final TextView originalView = (TextView) findViewById(R.id.originalView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // specify an adapter (see also next example)
+        JavaAdapter adapter = new JavaAdapter(javaGenerator);
+        recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        javaGenerator.variable.add("name", "김성용");
-        javaGenerator.command.print(javaGenerator.variable.get("name"));
-        Log.i("Log", "onCreate: " + javaGenerator.toString());
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
                 progressDialog.show();
                 AsyncTask.execute(new Runnable() {
                     @Override
@@ -67,7 +80,6 @@ public class EditorActivity extends AppCompatActivity {
                                 } else {
                                     contentView.setText(Html.fromHtml(highlighted));
                                 }
-                                originalView.setText(highlighted);
                                 progressDialog.hide();
                             }
                         });
@@ -106,20 +118,29 @@ public class EditorActivity extends AppCompatActivity {
 
         int depth = 0;
         StringBuilder builder = new StringBuilder();
-        StringTokenizer tokenizer = new StringTokenizer(prepare, "{}", true);
+//        builder.append("&nbsp;");
+        StringTokenizer tokenizer = new StringTokenizer(prepare, "{}\n ", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            System.out.printf("%s \n", token);
             builder.append(token);
             switch (token) {
                 case "{":
                     depth++;
-                    for (int i=0; i<depth; i++) {
-                        builder.append("&nbsp;");
-                    }
                     break;
                 case "}":
                     depth--;
+                    break;
+                case "\n":
+                    while (tokenizer.hasMoreTokens()) {
+                        token = tokenizer.nextToken();
+                        if (token.equals(" ")) {
+                            builder.append("&nbsp;");
+                        } else {
+                            builder.append(token);
+                            break;
+                        }
+                        builder.append(token);
+                    }
                     break;
             }
         }

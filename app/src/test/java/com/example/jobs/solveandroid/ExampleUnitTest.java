@@ -25,24 +25,27 @@ public class ExampleUnitTest {
     @Test
     public void java() {
         JavaGenerator javaGenerator = new JavaGenerator("Main");
-        javaGenerator.variable.add("name", "김성용");
-        javaGenerator.command.print(javaGenerator.variable.get("name"));
+        javaGenerator.addLocalVariable("name", "김성용");
+//        javaGenerator.command.print(javaGenerator.variable.get("name"));
         System.out.println(javaGenerator.toString());
     }
 
     @Test
     public void string() {
-        String input = "public class Main {public static void main(String[] args) {/** main */String name = \"김성용\";System.out.println( name );}}";
+//        String input = "public class Main {public static void main(String[] args) {/** main */String name = \"김성용\";System.out.println( name );}}";
+        String input = new JavaGenerator("Main").toString();
+        System.out.println(input);
 
         PrettifyHighlighter highlighter = new PrettifyHighlighter();
         String prepare = highlighter.highlight("java", input);
 
         int depth = 0;
         StringBuilder builder = new StringBuilder();
-        StringTokenizer tokenizer = new StringTokenizer(prepare, "{}", true);
+        builder.append("&nbsp;");
+        StringTokenizer tokenizer = new StringTokenizer(prepare, "{}\n", true);
+//        tokenizer.
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            System.out.printf("%s \n", token);
             builder.append(token);
             switch (token) {
                 case "{":
@@ -51,11 +54,10 @@ public class ExampleUnitTest {
                 case "}":
                     depth--;
                     break;
-                // TODO: not work
                 case "\n":
-                    for (int i=0; i<depth; i++) {
+//                    for (int i=0; i<depth; i++) {
                         builder.append("&nbsp;");
-                    }
+//                    }
                     break;
             }
         }

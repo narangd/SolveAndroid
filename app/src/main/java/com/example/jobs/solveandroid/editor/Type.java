@@ -12,6 +12,7 @@ public enum Type {
     String("String"),
     Float("float"),
     Double("double"),
+    Object("Object"),
     ;
     private String name;
     Type(String name) {

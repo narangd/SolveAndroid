@@ -4,22 +4,23 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
 import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.StringTokenizer;
 
@@ -33,8 +34,10 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        javaGenerator.addLocalVariable("name", "김성용");
+        javaGenerator.addLocalVariable("name", "김성용diahefhowhoe---wieeuwefwefwefwefwef23fiuha3f87a387fg234");
         javaGenerator.addLocalVariable("count", 10);
+        javaGenerator.addLocalVariable("title_of_activity", "제목");
+        javaGenerator.addLocalVariable("length", 1);
         for (Variable variable : javaGenerator.getVariables()) {
             javaGenerator.command.print(variable);
         }
@@ -61,30 +64,13 @@ public class EditorActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("업데이트 중입니다");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        updateJavaCode(contentView);
+        FloatingActionMenu fab = (FloatingActionMenu) findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        String content = javaGenerator.toString();
-                        final String highlighted = javaHighlighter(content);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    contentView.setText(Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY));
-                                } else {
-                                    contentView.setText(Html.fromHtml(highlighted));
-                                }
-                                progressDialog.hide();
-                            }
-                        });
-                    }
-                });
 
             }
         });
@@ -110,6 +96,28 @@ public class EditorActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateJavaCode(final TextView contentView) {
+        progressDialog.show();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                String content = javaGenerator.toString();
+                final String highlighted = javaHighlighter(content);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            contentView.setText(Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY));
+                        } else {
+                            contentView.setText(Html.fromHtml(highlighted));
+                        }
+                        progressDialog.hide();
+                    }
+                });
+            }
+        });
     }
 
     private String javaHighlighter(String string) {

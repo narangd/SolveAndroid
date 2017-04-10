@@ -1,9 +1,11 @@
 package com.example.jobs.solveandroid;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.editor.JavaAdapter;
@@ -22,6 +25,7 @@ import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
@@ -72,6 +76,29 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+        FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
+        fabPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Variable[] variables = javaGenerator.getVariables();
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("변수선택")
+                .setAdapter(
+                        new ArrayAdapter<>(
+                                v.getContext(),
+                                android.R.layout.simple_list_item_1,
+                                variables
+                        ), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                javaGenerator.command.print(variables[which]);
+                                updateJavaCode(contentView);
+                            }
+                        }
+                )
+                .show();
             }
         });
     }

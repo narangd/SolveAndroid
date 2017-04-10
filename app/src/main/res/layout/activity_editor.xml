@@ -32,16 +32,24 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_plus"
         fab:menu_shadowColor="#444"
-        fab:menu_colorNormal="@color/colorAccent">
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorAccentDark">
 
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fab_function"
-            android:src="@drawable/ic_content_save"
-            fab:fab_colorNormal="@color/colorAccent">
+            android:src="@drawable/ic_f"
+            fab:fab_colorNormal="@color/java_kwd"
+            fab:fab_colorPressed="@color/java_kwd_dark"/>
 
-        </com.github.clans.fab.FloatingActionButton>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab_print"
+            android:src="@drawable/ic_print"
+            fab:fab_colorNormal="@color/java_str"
+            fab:fab_colorPressed="@color/java_str_dark"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

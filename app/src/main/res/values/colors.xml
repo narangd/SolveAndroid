@@ -3,5 +3,18 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentDark">#E91E63</color>
     <color name="darcula_editor_background">#2B2B2B</color>
+
+    <!-- java -->
+
+    <color name="java_typ">#87cefa</color>
+    <color name="java_kwd">#FF9800</color><!--CC7832-->
+    <color name="java_kwd_dark">#F57C00</color>
+    <color name="java_lit">#ffff00</color>
+    <color name="java_com">#808080</color>
+    <color name="java_str">#388E3C</color><!--008000-->
+    <color name="java_str_dark">#2E7D32</color><!--008000-->
+    <color name="java_pun">#E8BF6A</color>
+    <color name="java_pln">#A9B7C6</color>
 </resources>

@@ -17,7 +17,7 @@ import syntaxhighlight.Parser;
 public class PrettifyHighlighter {
     private static final Map<String, String> COLORS = buildColorsMap();
 
-    private static final String FONT_PATTERN = "<font color=\"#%s\">%s</font>";
+    private static final String FONT_PATTERN = "<font color=\"%s\">%s</font>";
 
     private final Parser parser = new PrettifyParser();
 
@@ -38,13 +38,13 @@ public class PrettifyHighlighter {
 
     private static Map<String, String> buildColorsMap() {
         Map<String, String> map = new HashMap<>();
-        map.put("typ", "87cefa");
-        map.put("kwd", "CC7832");
-        map.put("lit", "ffff00");
-        map.put("com", "808080");
-        map.put("str", "008000");
-        map.put("pun", "E8BF6A");
-        map.put("pln", "A9B7C6");
+        map.put("typ", "#87cefa");
+        map.put("kwd", "#CC7832");
+        map.put("lit", "#ffff00");
+        map.put("com", "#808080");
+        map.put("str", "#008000");
+        map.put("pun", "#E8BF6A");
+        map.put("pln", "#A9B7C6");
         return map;
     }
 }

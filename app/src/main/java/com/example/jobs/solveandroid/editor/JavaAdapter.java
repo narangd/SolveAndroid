@@ -11,6 +11,7 @@ import com.example.jobs.solveandroid.R;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class JavaAdapter extends RecyclerView.Adapter {
@@ -42,7 +43,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
     public JavaAdapter(JavaGenerator javaGenerator) {
         this.javaGenerator = javaGenerator;
         this.variables = new ArrayList<>();
-        variables.addAll(javaGenerator.getVariables());
+        Collections.addAll(variables, javaGenerator.getVariables());
     }
 
     @Override

@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +18,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
 import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
+import com.example.jobs.solveandroid.util.ViewUtil;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -38,7 +46,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        javaGenerator.addLocalVariable("name", "김성용diahefhowhoe---wieeuwefwefwefwefwef23fiuha3f87a387fg234");
+        javaGenerator.addLocalVariable("name", "김성용");
         javaGenerator.addLocalVariable("count", 10);
         javaGenerator.addLocalVariable("title_of_activity", "제목");
         javaGenerator.addLocalVariable("length", 1);
@@ -48,10 +56,10 @@ public class EditorActivity extends AppCompatActivity {
         Log.i("Log", "onCreate: " + javaGenerator.toString());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Main");
         setSupportActionBar(toolbar);
 
-        final TextView contentView = (TextView) findViewById(R.id.contentView);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -70,12 +78,12 @@ public class EditorActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("업데이트 중입니다");
 
-        updateJavaCode(contentView);
-        FloatingActionMenu fab = (FloatingActionMenu) findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // TODO fab 가 닫히는건 어케
+        FloatingActionButton fabAdd = (FloatingActionButton) findViewById(R.id.fab_variable);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                javaGenerator.addLocalVariable("teset", (byte) 10);
             }
         });
         FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
@@ -86,15 +94,26 @@ public class EditorActivity extends AppCompatActivity {
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("변수선택")
                 .setAdapter(
-                        new ArrayAdapter<>(
+                        new ArrayAdapter<Variable>(
                                 v.getContext(),
                                 android.R.layout.simple_list_item_1,
                                 variables
-                        ), new DialogInterface.OnClickListener() {
+                        ) {
+                            @NonNull
+                            @Override
+                            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                                View root = super.getView(position, convertView, parent);
+                                TextView textView = (TextView) root.findViewById(android.R.id.text1);
+                                Variable variable = getItem(position);
+                                if (textView != null && variable != null) {
+                                    textView.setText(variable.name);
+                                }
+                                return root;
+                            }
+                        }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 javaGenerator.command.print(variables[which]);
-                                updateJavaCode(contentView);
                             }
                         }
                 )
@@ -118,14 +137,45 @@ public class EditorActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_print:
+                updateJavaCode(new SetTextable() {
+                    @Override
+                    public void setText(CharSequence charSequence) {
+                        LinearLayout linearLayout = new LinearLayout(EditorActivity.this);
+                        linearLayout.setOrientation(LinearLayout.VERTICAL);
+                        Space space = new Space(EditorActivity.this);
+                        linearLayout.addView(space);
+                        space.setMinimumHeight(ViewUtil.dp2Pixel(EditorActivity.this, 20));
+                        ScrollView scrollView = new ScrollView(EditorActivity.this);
+                        linearLayout.addView(scrollView);
+                        TextView textView = new TextView(EditorActivity.this);
+                        scrollView.addView(textView);
+                        textView.setBackgroundColor(
+                                ContextCompat.getColor(EditorActivity.this, R.color.darcula_editor_background)
+                        );
+                        textView.setPadding(
+                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
+                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
+                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
+                                ViewUtil.dp2Pixel(EditorActivity.this, 8)
+                        );
+                        textView.setText(charSequence);
+                        new AlertDialog.Builder(EditorActivity.this)
+                                .setTitle("변환된 자바코드")
+                                .setView(linearLayout)
+                                .show();
+                    }
+                });
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateJavaCode(final TextView contentView) {
+    private void updateJavaCode(final SetTextable setTextable) {
         progressDialog.show();
         AsyncTask.execute(new Runnable() {
             @Override
@@ -136,9 +186,9 @@ public class EditorActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            contentView.setText(Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY));
+                            setTextable.setText(Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY));
                         } else {
-                            contentView.setText(Html.fromHtml(highlighted));
+                            setTextable.setText(Html.fromHtml(highlighted));
                         }
                         progressDialog.hide();
                     }
@@ -146,37 +196,31 @@ public class EditorActivity extends AppCompatActivity {
             }
         });
     }
+    private interface SetTextable {
+        void setText(CharSequence charSequence);
+    }
 
     private String javaHighlighter(String string) {
         PrettifyHighlighter highlighter = new PrettifyHighlighter();
         String prepare = highlighter.highlight("java", string);
 
-        int depth = 0;
+        // to keep indent
         StringBuilder builder = new StringBuilder();
-//        builder.append("&nbsp;");
-        StringTokenizer tokenizer = new StringTokenizer(prepare, "{}\n ", true);
+        StringTokenizer tokenizer = new StringTokenizer(prepare, "\n ", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             builder.append(token);
-            switch (token) {
-                case "{":
-                    depth++;
-                    break;
-                case "}":
-                    depth--;
-                    break;
-                case "\n":
-                    while (tokenizer.hasMoreTokens()) {
-                        token = tokenizer.nextToken();
-                        if (token.equals(" ")) {
-                            builder.append("&nbsp;");
-                        } else {
-                            builder.append(token);
-                            break;
-                        }
+            if (token.equals("\n")) {
+                while (tokenizer.hasMoreTokens()) {
+                    token = tokenizer.nextToken();
+                    if (token.equals(" ")) {
+                        builder.append("&nbsp;");
+                    } else {
                         builder.append(token);
+                        break;
                     }
-                    break;
+                    builder.append(token);
+                }
             }
         }
         return builder.toString().replace("\n", "\n<br/>");

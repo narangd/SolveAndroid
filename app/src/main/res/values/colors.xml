@@ -12,7 +12,8 @@
     <color name="java_kwd">#FF9800</color><!--CC7832-->
     <color name="java_kwd_dark">#F57C00</color>
     <color name="java_lit">#ffff00</color>
-    <color name="java_com">#808080</color>
+    <color name="java_com">#607D8B</color><!--808080-->
+    <color name="java_com_dark">#546E7A</color><!--808080-->
     <color name="java_str">#388E3C</color><!--008000-->
     <color name="java_str_dark">#2E7D32</color><!--008000-->
     <color name="java_pun">#E8BF6A</color>

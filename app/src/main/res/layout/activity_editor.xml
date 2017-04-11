@@ -38,8 +38,16 @@
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/fab_variable"
+            android:src="@drawable/ic_variable"
+            fab:fab_colorNormal="@color/java_com"
+            fab:fab_colorPressed="@color/java_com_dark"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/fab_function"
-            android:src="@drawable/ic_f"
+            android:src="@drawable/ic_function"
             fab:fab_colorNormal="@color/java_kwd"
             fab:fab_colorPressed="@color/java_kwd_dark"/>
 

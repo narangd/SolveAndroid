@@ -2,7 +2,6 @@ package com.example.jobs.solveandroid.editor;
 
 import com.example.jobs.solveandroid.editor.component.Variable;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -16,14 +15,14 @@ public class VarManager {
         variables.remove(name);
     }
 
-    public Collection<Variable> getNames() {
-        return variables.values();
-    }
+//    public Collection<Variable> getNames() {
+//        return variables;
+//    }
 
     public String definition() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String name : variables.keySet()) {
-            Variable variable = variables.get(name);
+        for (String key : variables.keySet()) {
+            Variable variable = variables.get(key);
             stringBuilder
                     .append("  ")
                     .append(variable.type)

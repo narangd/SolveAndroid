@@ -10,9 +10,6 @@ import android.widget.TextView;
 import com.example.jobs.solveandroid.R;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 
 public class JavaAdapter extends RecyclerView.Adapter {
 
@@ -38,12 +35,9 @@ public class JavaAdapter extends RecyclerView.Adapter {
     }
 
     private JavaGenerator javaGenerator;
-    private ArrayList<Variable> variables;
 
     public JavaAdapter(JavaGenerator javaGenerator) {
         this.javaGenerator = javaGenerator;
-        this.variables = new ArrayList<>();
-        Collections.addAll(variables, javaGenerator.getVariables());
     }
 
     @Override
@@ -62,7 +56,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VariableHolder) {
-            final Variable variable = variables.get(position);
+            final Variable variable = javaGenerator.getVariable(position);
 
             VariableHolder variableHolder = (VariableHolder) holder;
             variableHolder.typeView.setText(variable.type.toString());
@@ -82,6 +76,6 @@ public class JavaAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return variables.size();
+        return javaGenerator.getLength();
     }
 }

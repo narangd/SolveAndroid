@@ -1,12 +1,14 @@
 package com.example.jobs.solveandroid.editor.component;
 
+import android.support.annotation.NonNull;
+
 import com.example.jobs.solveandroid.editor.Type;
 
 /**
  * @author sykim
  * @date 2017. 04. 06
  */
-public class Variable {
+public class Variable implements Comparable<Variable> {
     public final String name;
     public final Type type;
     private Object value;
@@ -117,5 +119,10 @@ public class Variable {
             default:
                 return "null";
         }
+    }
+
+    @Override
+    public int compareTo(@NonNull Variable o) {
+        return name.compareTo(o.name);
     }
 }

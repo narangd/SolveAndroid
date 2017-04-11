@@ -70,7 +70,7 @@ public class EditorActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // specify an adapter (see also next example)
-        JavaAdapter adapter = new JavaAdapter(javaGenerator);
+        final JavaAdapter adapter = new JavaAdapter(javaGenerator);
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
@@ -78,19 +78,23 @@ public class EditorActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("업데이트 중입니다");
 
-        // TODO fab 가 닫히는건 어케
-        FloatingActionButton fabAdd = (FloatingActionButton) findViewById(R.id.fab_variable);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
+        FloatingActionButton fabVariable = (FloatingActionButton) findViewById(R.id.fab_variable);
+        fabVariable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fabMenu.close(true);
                 javaGenerator.addLocalVariable("teset", (byte) 10);
+//                adapter.notifyItemInserted(javaGenerator.getLength()-1);
+                adapter.notifyDataSetChanged();
             }
         });
-        FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
+        final FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
         fabPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Variable[] variables = javaGenerator.getVariables();
+                fabMenu.close(true);
+                ArrayList<Variable> variables = new ArrayList<>(javaGenerator.getVariables());
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("변수선택")
                 .setAdapter(
@@ -113,7 +117,7 @@ public class EditorActivity extends AppCompatActivity {
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                javaGenerator.command.print(variables[which]);
+                                javaGenerator.command.print(javaGenerator.getVariable(which));
                             }
                         }
                 )

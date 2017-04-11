@@ -41,6 +41,7 @@
             android:id="@+id/fab_variable"
             android:src="@drawable/ic_variable"
             fab:fab_colorNormal="@color/java_com"
+            fab:menu_openDirection="up"
             fab:fab_colorPressed="@color/java_com_dark"/>
 
         <com.github.clans.fab.FloatingActionButton

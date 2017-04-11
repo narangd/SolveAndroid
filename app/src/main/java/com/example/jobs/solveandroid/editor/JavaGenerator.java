@@ -46,8 +46,14 @@ public class JavaGenerator {
         variable.variables.put(title+".main."+name, new Variable(name, value));
     }
 
-    public Variable[] getVariables() {
-        return variable.getNames().toArray(new Variable[variable.getNames().size()]);
+    public Collection<Variable> getVariables() {
+        return variable.variables.values();
+    }
+    public Variable getVariable(int index) {
+        return (Variable) variable.variables.values().toArray()[index];
+    }
+    public int getLength() {
+        return variable.variables.size();
     }
 
     @Override

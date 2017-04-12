@@ -56,7 +56,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VariableHolder) {
-            final Variable variable = javaGenerator.getVariable(position);
+            final Variable variable = javaGenerator.variable.get(position);
 
             VariableHolder variableHolder = (VariableHolder) holder;
             variableHolder.typeView.setText(variable.type.toString());
@@ -76,6 +76,6 @@ public class JavaAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return javaGenerator.getLength();
+        return javaGenerator.variable.size();
     }
 }

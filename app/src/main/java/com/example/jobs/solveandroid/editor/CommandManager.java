@@ -1,5 +1,7 @@
-package com.example.jobs.solveandroid.editor.command;
+package com.example.jobs.solveandroid.editor;
 
+import com.example.jobs.solveandroid.editor.command.Command;
+import com.example.jobs.solveandroid.editor.command.PrintCommand;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
@@ -13,6 +15,14 @@ public class CommandManager {
 
     public void print(Variable variable) {
         commands.add(new PrintCommand(variable));
+    }
+
+    public void remove(int index) {
+        commands.remove(index);
+    }
+
+    public int size() {
+        return commands.size();
     }
 
     @Override

@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
@@ -50,7 +51,7 @@ public class EditorActivity extends AppCompatActivity {
         javaGenerator.addLocalVariable("count", 10);
         javaGenerator.addLocalVariable("title_of_activity", "제목");
         javaGenerator.addLocalVariable("length", 1);
-        for (Variable variable : javaGenerator.getVariables()) {
+        for (Variable variable : javaGenerator.variable.list()) {
             javaGenerator.command.print(variable);
         }
         Log.i("Log", "onCreate: " + javaGenerator.toString());
@@ -84,9 +85,15 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 fabMenu.close(true);
-                javaGenerator.addLocalVariable("teset", (byte) 10);
-//                adapter.notifyItemInserted(javaGenerator.getLength()-1);
-                adapter.notifyDataSetChanged();
+//                javaGenerator.addLocalVariable("teset", (byte) 10);
+                new VariableDialog(EditorActivity.this)
+                        .setCreateButton(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .show();
             }
         });
         final FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
@@ -94,14 +101,13 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-                ArrayList<Variable> variables = new ArrayList<>(javaGenerator.getVariables());
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("변수선택")
                 .setAdapter(
                         new ArrayAdapter<Variable>(
                                 v.getContext(),
                                 android.R.layout.simple_list_item_1,
-                                variables
+                                javaGenerator.variable.list()
                         ) {
                             @NonNull
                             @Override
@@ -117,7 +123,7 @@ public class EditorActivity extends AppCompatActivity {
                         }, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                javaGenerator.command.print(javaGenerator.getVariable(which));
+                                javaGenerator.command.print(javaGenerator.variable.get(which));
                             }
                         }
                 )

@@ -3,6 +3,7 @@ package com.example.jobs.solveandroid.editor;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +22,12 @@ public class VariableManager {
     }
 
     public void add(Variable variable) {
-        variableHashMap.put(variable.name, variable);
-        variableArray.add(variable);
+        if (variableHashMap.get(variable.name) == null) {
+            variableHashMap.put(variable.name, variable);
+            variableArray.add(variable);
+        }
+        System.out.println(Arrays.toString(variableHashMap.values().toArray()));
+        System.out.println(Arrays.toString(variableArray.toArray()));
     }
 
     public Variable get(String name) {

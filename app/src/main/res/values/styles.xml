@@ -19,5 +19,19 @@
         <item name="fab_colorNormal">@color/colorAccent</item>
         <item name="fab_colorPressed">@color/colorAccentDark</item>
     </style>
+    
+    <style name="VariableInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:padding">12dp</item>
+        <item name="colorAccent">@color/java_com</item>
+        <item name="colorControlNormal">@color/java_com</item>
+        <item name="colorControlActivated">@color/java_com_dark</item>
+        <item name="android:textColorHint">@color/java_com_light</item>
+    </style>
+
+    <style name="VariableEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#fff</item>
+    </style>
 
 </resources>

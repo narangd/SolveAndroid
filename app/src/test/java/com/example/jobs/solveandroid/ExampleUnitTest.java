@@ -63,5 +63,14 @@ public class ExampleUnitTest {
         }
         System.out.println(builder.toString().replace("\n", "\n<br/>"));
     }
+
+    @Test
+    public void charAtText() {
+        String value = new String(new char[] {
+           '\\', 'u', '0','0','4','1'
+        });
+        System.out.println("\u0041".charAt(0));
+        System.out.println();
+    }
 }
 //public class Main {public static void main(String[] args) {/** main */String name = "김성용";System.out.println( name );}}

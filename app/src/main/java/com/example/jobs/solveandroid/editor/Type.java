@@ -6,18 +6,22 @@ package com.example.jobs.solveandroid.editor;
  */
 public enum Type {
     Byte("byte"),
+    Short("short"),
     Integer("int"),
     Long("long"),
     Character("char"),
     String("String"),
     Float("float"),
     Double("double"),
+    Boolean("boolean"),
     Object("Object"),
     ;
     private String name;
     Type(String name) {
         this.name = name;
     }
+
+
 
     @Override
     public String toString() {

@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +33,6 @@ import com.example.jobs.solveandroid.util.ViewUtil;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
@@ -47,14 +45,13 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        javaGenerator.addLocalVariable("name", "김성용");
+        javaGenerator.addLocalVariable("name", "sykim -= 1 234");
         javaGenerator.addLocalVariable("count", 10);
-        javaGenerator.addLocalVariable("title_of_activity", "제목");
+        javaGenerator.addLocalVariable("title_of_activity", "title...");
         javaGenerator.addLocalVariable("length", 1);
         for (Variable variable : javaGenerator.variable.list()) {
             javaGenerator.command.print(variable);
         }
-        Log.i("Log", "onCreate: " + javaGenerator.toString());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Main");
@@ -77,7 +74,7 @@ public class EditorActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("업데이트 중입니다");
+        progressDialog.setMessage("Loading");
 
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
         FloatingActionButton fabVariable = (FloatingActionButton) findViewById(R.id.fab_variable);
@@ -85,11 +82,11 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 fabMenu.close(true);
-//                javaGenerator.addLocalVariable("teset", (byte) 10);
                 new VariableDialog(EditorActivity.this)
-                        .setCreateButton(new DialogInterface.OnClickListener() {
+                        .setCreateButton(new VariableDialog.OnCreate() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void createVariable(Variable variable) {
+                                javaGenerator.variable.add(variable);
                                 adapter.notifyDataSetChanged();
                             }
                         })
@@ -102,7 +99,7 @@ public class EditorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.close(true);
                 new AlertDialog.Builder(v.getContext())
-                        .setTitle("변수선택")
+                        .setTitle("Select Variable")
                 .setAdapter(
                         new ArrayAdapter<Variable>(
                                 v.getContext(),
@@ -174,7 +171,7 @@ public class EditorActivity extends AppCompatActivity {
                         );
                         textView.setText(charSequence);
                         new AlertDialog.Builder(EditorActivity.this)
-                                .setTitle("변환된 자바코드")
+                                .setTitle("Java Source")
                                 .setView(linearLayout)
                                 .show();
                     }
@@ -191,15 +188,17 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String content = javaGenerator.toString();
-                final String highlighted = javaHighlighter(content);
+                String highlighted = javaHighlighter(content);
+                final CharSequence charSequence;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    charSequence = Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY);
+                } else {
+                    charSequence = Html.fromHtml(highlighted);
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            setTextable.setText(Html.fromHtml(highlighted, Html.FROM_HTML_MODE_LEGACY));
-                        } else {
-                            setTextable.setText(Html.fromHtml(highlighted));
-                        }
+                        setTextable.setText(charSequence);
                         progressDialog.hide();
                     }
                 });

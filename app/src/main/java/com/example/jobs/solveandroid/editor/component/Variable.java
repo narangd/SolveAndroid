@@ -121,6 +121,37 @@ public class Variable implements Comparable<Variable> {
         }
     }
 
+    public static Variable fromType(Type type, String name, String value) {
+        Variable variable;
+        switch (type) {
+            case Byte:
+                variable = new Variable(name, Byte.parseByte(value));
+                break;
+            case Short:
+                variable = new Variable(name, Short.parseShort(value));
+                break;
+            case Integer:
+                variable = new Variable(name, Integer.parseInt(value));
+                break;
+            case Long:
+                variable = new Variable(name, Long.parseLong(value));
+                break;
+            case Float:
+                variable = new Variable(name, Float.parseFloat(value));
+                break;
+            case Double:
+                variable = new Variable(name, Double.parseDouble(value));
+                break;
+            case Character:
+                variable = new Variable(name, value.charAt(0));
+                break;
+            case String:
+            default:
+                variable = new Variable(name, value);
+        }
+        return variable;
+    }
+
     @Override
     public int compareTo(@NonNull Variable o) {
         return name.compareTo(o.name);

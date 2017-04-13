@@ -10,8 +10,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/darcula_editor_background">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,11 +27,14 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:theme="@style/VariableInputLayout">
 
                 <EditText
                     android:id="@+id/name"
                     android:hint="Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
                     style="@style/VariableEditText"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -45,6 +47,8 @@
                 <EditText
                     android:id="@+id/value"
                     android:hint="Value"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     style="@style/VariableEditText"/>
 
             </android.support.design.widget.TextInputLayout>

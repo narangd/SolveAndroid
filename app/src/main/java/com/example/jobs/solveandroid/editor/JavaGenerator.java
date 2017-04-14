@@ -44,7 +44,7 @@ public class JavaGenerator {
     }
 
     public int size() {
-        return variable.size() + 0;
+        return variable.size() + command.size();
     }
 
     @Override

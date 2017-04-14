@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/fab_variable"
             android:src="@drawable/ic_variable"
+            fab:fab_label="add Variable"
             fab:fab_colorNormal="@color/java_com"
-            fab:menu_openDirection="up"
             fab:fab_colorPressed="@color/java_com_dark"/>
 
         <com.github.clans.fab.FloatingActionButton
@@ -49,7 +49,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/fab_function"
             android:src="@drawable/ic_function"
+            fab:fab_label="add Function"
             fab:fab_colorNormal="@color/java_kwd"
+            fab:fab_colorPressed="@color/java_kwd_dark"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab_command"
+            android:src="@drawable/ic_command"
+            fab:fab_label="add Command"
+            fab:fab_colorNormal="@color/java_pun"
             fab:fab_colorPressed="@color/java_kwd_dark"/>
 
         <com.github.clans.fab.FloatingActionButton

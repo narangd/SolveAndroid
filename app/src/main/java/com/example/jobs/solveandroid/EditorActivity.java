@@ -45,7 +45,13 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        javaGenerator.addLocalVariable("name", "sykim -= 1 234");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Loading");
+
+        javaGenerator.addLocalVariable("name", "sykim");
         javaGenerator.addLocalVariable("count", 10);
         javaGenerator.addLocalVariable("title_of_activity", "title...");
         javaGenerator.addLocalVariable("length", 1);
@@ -59,22 +65,14 @@ public class EditorActivity extends AppCompatActivity {
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // specify an adapter (see also next example)
         final JavaAdapter adapter = new JavaAdapter(javaGenerator);
         recyclerView.setAdapter(adapter);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Loading");
 
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
         FloatingActionButton fabVariable = (FloatingActionButton) findViewById(R.id.fab_variable);

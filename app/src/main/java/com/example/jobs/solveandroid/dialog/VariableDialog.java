@@ -77,8 +77,10 @@ public class VariableDialog {
         nameEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL)
+                    return false;
                 char ch = (char)event.getUnicodeChar();
-                if (ch >= 'a' && ch <= 'z' && ch >= 'A' && ch <= 'Z') {
+                if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
                     return false;
                 }
                 return true;
@@ -106,8 +108,8 @@ public class VariableDialog {
 
     private boolean validate() {
         return onCreate != null &&
-                StringUtil.isEmpty(nameEditText.getText().toString()) &&
-                StringUtil.isEmpty(valueEditText.getText().toString());
+                !StringUtil.isEmpty(nameEditText.getText().toString()) &&
+                !StringUtil.isEmpty(valueEditText.getText().toString());
     }
 
 

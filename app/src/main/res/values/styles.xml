@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/darcula_editor_background</item>
+        <item name="android:textColor">@color/java_pln</item>
         <!--<item name="android:background">@color/darcula_editor_background</item>-->
     </style>
     <style name="AppTheme.NoActionBar">
@@ -16,9 +17,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="VariableDialog" parent="Base.Theme.AppCompat.Dialog">
+    <style name="VariableDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/darcula_editor_background</item>
-        <item name="colorAccent">@color/java_com_light</item>
+        <item name="colorAccent">@color/java_com</item>
         <!--<item name="android:layout_margin">10dp</item>-->
     </style>
 
@@ -37,8 +38,6 @@
     </style>
 
     <style name="VariableEditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:lines">1</item>
         <item name="android:textColor">#fff</item>
     </style>

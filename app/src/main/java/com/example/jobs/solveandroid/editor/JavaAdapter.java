@@ -14,6 +14,8 @@ import com.example.jobs.solveandroid.editor.component.Variable;
 
 public class JavaAdapter extends RecyclerView.Adapter {
 
+    private static final int SpaceType = 0;
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -39,10 +41,16 @@ public class JavaAdapter extends RecyclerView.Adapter {
     private static class CommandHolder extends RecyclerView.ViewHolder {
         public static final int TYPE = 20;
 
-        TextView textView;
-        public CommandHolder(TextView textView) {
-            super(textView);
-            this.textView = textView;
+        View root;
+        TextView returnTypeView;
+        TextView nameView;
+        TextView parameterView;
+        public CommandHolder(View root) {
+            super(root);
+            this.root = root;
+            returnTypeView = (TextView) root.findViewById(R.id.return_type);
+            nameView = (TextView) root.findViewById(R.id.name);
+            parameterView = (TextView) root.findViewById(R.id.parameter);
         }
     }
 
@@ -64,10 +72,13 @@ public class JavaAdapter extends RecyclerView.Adapter {
                 return new VariableHolder(v);
             case CommandHolder.TYPE:
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(android.R.layout.simple_list_item_1, parent, false);
-                return new CommandHolder((TextView) v);
+                        .inflate(R.layout.holder_command, parent, false);
+                return new CommandHolder(v);
+            case SpaceType:
             default:
-                return null;
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.holder_fab_space, parent, false);
+                return new RecyclerView.ViewHolder(v) {};
         }
     }
 
@@ -75,8 +86,10 @@ public class JavaAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         if (position < javaGenerator.variable.size()) {
             return VariableHolder.TYPE;
-        } else {
+        } else if (position < javaGenerator.size()){
             return CommandHolder.TYPE;
+        } else {
+            return SpaceType;
         }
 //        return super.getItemViewType(position);
     }
@@ -103,14 +116,22 @@ public class JavaAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof CommandHolder) {
             int index = position - javaGenerator.variable.size();
             CommandHolder commandHolder = (CommandHolder) holder;
-            commandHolder.textView.setText(
+            commandHolder.returnTypeView.setText("void");
+            commandHolder.nameView.setText(
                     javaGenerator.command.get(index).toString()
             );
+            commandHolder.parameterView.setText("-");
+            commandHolder.root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return javaGenerator.size();
+        return javaGenerator.size()+1;
     }
 }

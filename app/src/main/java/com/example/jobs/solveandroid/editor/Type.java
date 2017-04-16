@@ -15,6 +15,7 @@ public enum Type {
     Double("double"),
     Boolean("boolean"),
     Object("Object"),
+    Void("void"),
     ;
     private String name;
     Type(String name) {

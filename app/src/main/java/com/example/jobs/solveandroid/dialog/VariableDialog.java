@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,33 +75,31 @@ public class VariableDialog {
             }
         });
 
-        nameEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL)
-                    return false;
-                char ch = (char)event.getUnicodeChar();
-                if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
-                    return false;
-                }
-                return true;
-            }
-        });
+//        nameEditText.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (keyCode == KeyEvent.KEYCODE_DEL)
+//                    return false;
+//                else if (keyCode >= KeyEvent.KEYCODE_A && keyCode <= KeyEvent.KEYCODE_Z) {
+//                    return false;
+//                }
+////                char ch = (char)event.getUnicodeChar();
+////                if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+////                    return false;
+////                }
+//                return true;
+//            }
+//        });
 
         return root;
     }
 
     public VariableDialog setCreateButton(final OnCreate onCreate) {
         this.onCreate = onCreate;
+
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (validate()) {
-                    String name = nameEditText.getText().toString();
-                    String value = valueEditText.getText().toString();
-                    Variable variable = Variable.fromType(type, name, value);
-                    VariableDialog.this.onCreate.createVariable(variable);
-                }
             }
         });
         return this;
@@ -114,7 +113,22 @@ public class VariableDialog {
 
 
     public AlertDialog create() {
-        return builder.create();
+        AlertDialog alertDialog = builder.create();
+        Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        if (positiveButton != null) {
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validate()) {
+                        String name = nameEditText.getText().toString();
+                        String value = valueEditText.getText().toString();
+                        Variable variable = Variable.fromType(type, name, value);
+                        VariableDialog.this.onCreate.createVariable(variable);
+                    }
+                }
+            });
+        }
+        return alertDialog;
     }
 
     public void show() {

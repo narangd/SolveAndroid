@@ -19,6 +19,12 @@ public class Variable implements Comparable<Variable> {
         value = integer;
     }
 
+    public Variable(String name, short integer) {
+        this.name = name;
+        type = Type.Short;
+        value = integer;
+    }
+
     public Variable(String name, int integer) {
         this.name = name;
         type = Type.Integer;
@@ -55,8 +61,18 @@ public class Variable implements Comparable<Variable> {
         value = _float;
     }
 
+    public Variable(String name, boolean _boolean) {
+        this.name = name;
+        type = Type.Boolean;
+        value = _boolean;
+    }
+
     public byte valueByte() {
         return Byte.parseByte(value.toString());
+    }
+
+    public short valueShort() {
+        return Short.parseShort(value.toString());
     }
 
     public int valueInteger() {
@@ -83,6 +99,10 @@ public class Variable implements Comparable<Variable> {
         return Double.parseDouble(value.toString());
     }
 
+    public boolean valueBoolean() {
+        return Boolean.parseBoolean(value.toString());
+    }
+
     @Override
     public String toString() {
         switch (type) {
@@ -93,10 +113,12 @@ public class Variable implements Comparable<Variable> {
             case String:
                 return "\""+ value +"\"";
             case Byte:
+            case Short:
             case Integer:
             case Long:
             case Float:
             case Double:
+            case Boolean:
             default:
                 return value.toString();
         }
@@ -109,12 +131,15 @@ public class Variable implements Comparable<Variable> {
             case String:
                 return "\"\"";
             case Byte:
+            case Short:
             case Integer:
             case Long:
                 return "0";
             case Float:
             case Double:
                 return "0.0";
+            case Boolean:
+                return "false";
             case Object:
             default:
                 return "null";
@@ -144,6 +169,9 @@ public class Variable implements Comparable<Variable> {
                 break;
             case Character:
                 variable = new Variable(name, value.charAt(0));
+                break;
+            case Boolean:
+                variable = new Variable(name, Boolean.parseBoolean(value));
                 break;
             case String:
             default:

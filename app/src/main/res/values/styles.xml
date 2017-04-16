@@ -40,6 +40,7 @@
     <style name="VariableEditText">
         <item name="android:lines">1</item>
         <item name="android:textColor">#fff</item>
+        <item name="android:digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</item>
     </style>
 
 </resources>

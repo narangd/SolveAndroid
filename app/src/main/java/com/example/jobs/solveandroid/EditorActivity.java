@@ -85,7 +85,7 @@ public class EditorActivity extends AppCompatActivity {
                             @Override
                             public void createVariable(Variable variable) {
                                 javaGenerator.variable.add(variable);
-                                adapter.notifyDataSetChanged();
+                                adapter.notifyItemInserted(javaGenerator.variable.size()-1);
                             }
                         })
                         .show();
@@ -119,6 +119,7 @@ public class EditorActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 javaGenerator.command.print(javaGenerator.variable.get(which));
+                                adapter.notifyItemInserted(javaGenerator.size()-1);
                             }
                         }
                 )

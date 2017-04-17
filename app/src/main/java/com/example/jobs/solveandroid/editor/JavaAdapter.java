@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.R;
+import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.command.Command;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
@@ -95,7 +96,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         System.out.println("create " + position);
         if (holder instanceof VariableHolder) {
             final Variable variable = javaGenerator.variable.get(position);
@@ -107,9 +108,14 @@ public class JavaAdapter extends RecyclerView.Adapter {
             variableHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("Detail")
-                            .setMessage("value:" + variable)
+                    new VariableDialog(v.getContext(), variable)
+                            .setCreateButton("Update", new VariableDialog.OnPositive() {
+                                @Override
+                                public void onVariable(Variable variable) {
+                                    javaGenerator.variable.put(variable);
+                                    JavaAdapter.this.notifyItemChanged(position);
+                                }
+                            })
                             .show();
                 }
             });

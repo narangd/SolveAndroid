@@ -30,6 +30,12 @@ public class VariableManager {
         System.out.println(Arrays.toString(variableArray.toArray()));
     }
 
+    public void put(Variable variable) {
+//        variableHashMap.remove(variable);
+//        variableArray.remove(variable);
+        variableHashMap.put(variable.name, variable);
+    }
+
     public Variable get(String name) {
         return variableHashMap.get(name);
     }

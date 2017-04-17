@@ -3,8 +3,6 @@ package com.example.jobs.solveandroid.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.jobs.solveandroid.R;
 import com.example.jobs.solveandroid.editor.Type;
@@ -27,10 +24,11 @@ public class VariableDialog {
     private static int typeIndex = 0;
 
     private AlertDialog.Builder builder;
-    private OnCreate onCreate;
+    private OnPositive onPositive;
     private Type type;
     private EditText nameEditText;
     private EditText valueEditText;
+    private Spinner spinner;
 
     public VariableDialog(Context context) {
         builder = new AlertDialog.Builder(context, R.style.VariableDialog);
@@ -44,10 +42,23 @@ public class VariableDialog {
         });
     }
 
+    public VariableDialog(Context context, Variable variable) {
+        this(context);
+        nameEditText.setText(variable.name);
+        Type[] types = Type.values();
+        for (int i=0; i<types.length; i++) {
+            if (types[i] == variable.type) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+        valueEditText.setText(variable.valueString());
+    }
+
     private View createView(final Context context) {
         View root = LayoutInflater.from(context)
                 .inflate(R.layout.dialog_create_variable, null);
-        Spinner spinner = (Spinner) root.findViewById(R.id.spinner);
+        spinner = (Spinner) root.findViewById(R.id.spinner);
         nameEditText = (EditText) root.findViewById(R.id.name);
         valueEditText = (EditText) root.findViewById(R.id.value);
 
@@ -94,10 +105,10 @@ public class VariableDialog {
         return root;
     }
 
-    public VariableDialog setCreateButton(final OnCreate onCreate) {
-        this.onCreate = onCreate;
+    public VariableDialog setCreateButton(String caption, final OnPositive onPositive) {
+        this.onPositive = onPositive;
 
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(caption, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -106,7 +117,7 @@ public class VariableDialog {
     }
 
     private boolean validate() {
-        return onCreate != null &&
+        return onPositive != null &&
                 !StringUtil.isEmpty(nameEditText.getText().toString()) &&
                 !StringUtil.isEmpty(valueEditText.getText().toString());
     }
@@ -123,7 +134,7 @@ public class VariableDialog {
                         String name = nameEditText.getText().toString();
                         String value = valueEditText.getText().toString();
                         Variable variable = Variable.fromType(type, name, value);
-                        VariableDialog.this.onCreate.createVariable(variable);
+                        VariableDialog.this.onPositive.onVariable(variable);
                     }
                 }
             });
@@ -135,7 +146,7 @@ public class VariableDialog {
         create().show();
     }
 
-    public interface OnCreate {
-        void createVariable(Variable variable);
+    public interface OnPositive {
+        void onVariable(Variable variable);
     }
 }

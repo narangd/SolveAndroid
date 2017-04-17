@@ -81,9 +81,9 @@ public class EditorActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fabMenu.close(true);
                 new VariableDialog(EditorActivity.this)
-                        .setCreateButton(new VariableDialog.OnCreate() {
+                        .setCreateButton("Create", new VariableDialog.OnPositive() {
                             @Override
-                            public void createVariable(Variable variable) {
+                            public void onVariable(Variable variable) {
                                 javaGenerator.variable.add(variable);
                                 adapter.notifyItemInserted(javaGenerator.variable.size()-1);
                             }

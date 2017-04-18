@@ -96,9 +96,10 @@ public class JavaAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         System.out.println("create " + position);
         if (holder instanceof VariableHolder) {
+            final int curpos = position;
             final Variable variable = javaGenerator.variable.get(position);
 
             VariableHolder variableHolder = (VariableHolder) holder;
@@ -113,7 +114,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
                                 @Override
                                 public void onVariable(Variable variable) {
                                     javaGenerator.variable.put(variable);
-                                    JavaAdapter.this.notifyItemChanged(position);
+                                    JavaAdapter.this.notifyItemChanged(curpos);
                                 }
                             })
                             .show();

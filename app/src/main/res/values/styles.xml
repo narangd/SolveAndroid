@@ -28,9 +28,14 @@
         <item name="fab_colorNormal">@color/colorAccent</item>
         <item name="fab_colorPressed">@color/colorAccentDark</item>
     </style>
+
+    <style name="ListItem">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+    </style>
     
     <style name="VariableInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_margin">@dimen/activity_padding</item>
         <item name="android:textColorHint">@color/java_com_light</item>
         <item name="colorAccent">@color/java_com</item>
         <item name="colorControlNormal">@color/java_com</item>
@@ -40,6 +45,10 @@
     <style name="VariableEditText">
         <item name="android:lines">1</item>
         <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="VariableButton">
+        <item name="android:background">@color/java_com</item>
     </style>
 
 </resources>

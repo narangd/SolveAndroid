@@ -8,6 +8,8 @@
 
     <!-- java -->
 
+    <color name="java_white">#fff</color>
+
     <color name="java_typ">#87cefa</color>
     <color name="java_kwd">#FF9800</color><!--CC7832-->
     <color name="java_kwd_dark">#F57C00</color>

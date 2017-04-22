@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:background="?android:selectableItemBackground">
+    style="@style/ListItem">
 
     <TextView
         android:layout_width="match_parent"

@@ -4,26 +4,28 @@ import android.support.annotation.NonNull;
 
 import com.example.jobs.solveandroid.editor.Type;
 
+import java.io.Serializable;
+
 /**
  * @author sykim
  * @date 2017. 04. 06
  */
-public class Variable implements Comparable<Variable> {
+public class Variable implements Comparable<Variable>, Serializable {
     public final String name;
     public final Type type;
     private Object value;
 
-    public Variable(String name, byte integer) {
-        this.name = name;
-        type = Type.Byte;
-        value = integer;
-    }
-
-    public Variable(String name, short integer) {
-        this.name = name;
-        type = Type.Short;
-        value = integer;
-    }
+//    public Variable(String name, byte integer) {
+//        this.name = name;
+//        type = Type.Byte;
+//        value = integer;
+//    }
+//
+//    public Variable(String name, short integer) {
+//        this.name = name;
+//        type = Type.Short;
+//        value = integer;
+//    }
 
     public Variable(String name, int integer) {
         this.name = name;
@@ -31,11 +33,11 @@ public class Variable implements Comparable<Variable> {
         value = integer;
     }
 
-    public Variable(String name, long integer) {
-        this.name = name;
-        type = Type.Long;
-        value = integer;
-    }
+//    public Variable(String name, long integer) {
+//        this.name = name;
+//        type = Type.Long;
+//        value = integer;
+//    }
 
     public Variable(String name, char character) {
         this.name = name;
@@ -49,15 +51,21 @@ public class Variable implements Comparable<Variable> {
         value = string;
     }
 
-    public Variable(String name, float _float) {
-        this.name = name;
-        type = Type.Float;
-        value = _float;
-    }
+//    public Variable(String name, float _float) {
+//        this.name = name;
+//        type = Type.Float;
+//        value = _float;
+//    }
+//
+//    public Variable(String name, double _float) {
+//        this.name = name;
+//        type = Type.Double;
+//        value = _float;
+//    }
 
     public Variable(String name, double _float) {
         this.name = name;
-        type = Type.Double;
+        type = Type.Float;
         value = _float;
     }
 
@@ -67,21 +75,21 @@ public class Variable implements Comparable<Variable> {
         value = _boolean;
     }
 
-    public byte valueByte() {
-        return Byte.parseByte(value.toString());
-    }
+//    public byte valueByte() {
+//        return Byte.parseByte(value.toString());
+//    }
 
-    public short valueShort() {
-        return Short.parseShort(value.toString());
-    }
+//    public short valueShort() {
+//        return Short.parseShort(value.toString());
+//    }
 
     public int valueInteger() {
         return Integer.parseInt(value.toString());
     }
 
-    public long valueLong() {
-        return Long.parseLong(value.toString());
-    }
+//    public long valueLong() {
+//        return Long.parseLong(value.toString());
+//    }
 
     public char valueCharacter() {
         return value.toString().charAt(0);
@@ -91,11 +99,15 @@ public class Variable implements Comparable<Variable> {
         return value.toString();
     }
 
-    public float valueFloat() {
-        return Float.parseFloat(value.toString());
-    }
+//    public float valueFloat() {
+//        return Float.parseFloat(value.toString());
+//    }
+//
+//    public double valueDouble() {
+//        return Double.parseDouble(value.toString());
+//    }
 
-    public double valueDouble() {
+    public double valueFloat() {
         return Double.parseDouble(value.toString());
     }
 
@@ -106,18 +118,18 @@ public class Variable implements Comparable<Variable> {
     @Override
     public String toString() {
         switch (type) {
-            case Object:
-                return "null";
+//            case Object:
+//                return "null";
             case Character:
                 return "'"+ value +"'";
             case String:
                 return "\""+ value +"\"";
-            case Byte:
-            case Short:
+//            case Byte:
+//            case Short:
             case Integer:
-            case Long:
+//            case Long:
             case Float:
-            case Double:
+//            case Double:
             case Boolean:
             default:
                 return value.toString();
@@ -130,17 +142,17 @@ public class Variable implements Comparable<Variable> {
                 return "'\0'";
             case String:
                 return "\"\"";
-            case Byte:
-            case Short:
+//            case Byte:
+//            case Short:
             case Integer:
-            case Long:
+//            case Long:
                 return "0";
             case Float:
-            case Double:
+//            case Double:
                 return "0.0";
             case Boolean:
                 return "false";
-            case Object:
+//            case Object:
             default:
                 return "null";
         }
@@ -149,24 +161,24 @@ public class Variable implements Comparable<Variable> {
     public static Variable fromType(Type type, String name, String value) {
         Variable variable;
         switch (type) {
-            case Byte:
-                variable = new Variable(name, Byte.parseByte(value));
-                break;
-            case Short:
-                variable = new Variable(name, Short.parseShort(value));
-                break;
+//            case Byte:
+//                variable = new Variable(name, Byte.parseByte(value));
+//                break;
+//            case Short:
+//                variable = new Variable(name, Short.parseShort(value));
+//                break;
             case Integer:
                 variable = new Variable(name, Integer.parseInt(value));
                 break;
-            case Long:
-                variable = new Variable(name, Long.parseLong(value));
-                break;
+//            case Long:
+//                variable = new Variable(name, Long.parseLong(value));
+//                break;
             case Float:
                 variable = new Variable(name, Float.parseFloat(value));
                 break;
-            case Double:
-                variable = new Variable(name, Double.parseDouble(value));
-                break;
+//            case Double:
+//                variable = new Variable(name, Double.parseDouble(value));
+//                break;
             case Character:
                 variable = new Variable(name, value.charAt(0));
                 break;

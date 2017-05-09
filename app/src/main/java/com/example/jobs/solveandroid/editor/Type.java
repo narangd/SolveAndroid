@@ -5,27 +5,27 @@ package com.example.jobs.solveandroid.editor;
  * @date 2017. 04. 06
  */
 public enum Type {
-    Byte("byte"),
-    Short("short"),
-    Integer("int"),
-    Long("long"),
-    Character("char"),
-    String("String"),
-    Float("float"),
-    Double("double"),
-    Boolean("boolean"),
-    Object("Object"),
-    Void("void"),
+//    Byte("byte"),
+//    Short("short"),
+    Integer,
+//    Long("long"),
+    Character,
+    String,
+    Float,
+//    Double("double"),
+    Boolean,
+//    Object("Object"),
+    Void,
     ;
-    private String name;
-    Type(String name) {
-        this.name = name;
-    }
+//    private String name;
+//    Type(String name) {
+//        this.name = name;
+//    }
 
 
 
-    @Override
-    public String toString() {
-        return name;
-    }
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
 }

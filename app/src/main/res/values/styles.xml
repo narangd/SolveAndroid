@@ -1,13 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/darcula_editor_background</item>
-        <item name="android:textColor">@color/java_pln</item>
+        <!--<item name="android:windowBackground">@color/darcula_editor_background</item>-->
+        <!--<item name="android:textColor">@color/java_pln</item>-->
         <!--<item name="android:background">@color/darcula_editor_background</item>-->
     </style>
     <style name="AppTheme.NoActionBar">
@@ -43,8 +43,9 @@
     </style>
 
     <style name="VariableEditText">
+        <item name="android:inputType">text</item>
         <item name="android:lines">1</item>
-        <item name="android:textColor">#fff</item>
+        <!--<item name="android:textColor">#fff</item>-->
     </style>
 
     <style name="VariableButton">

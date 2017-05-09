@@ -3,6 +3,7 @@ package com.example.jobs.solveandroid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 
 import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.Type;
+import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +48,16 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class VariableActivity extends AppCompatActivity {
+    public static final String Key_Method = "method";
+    public static final String Key_Variable = "variable";
+    public static final int ResultCode_Create = 10;
     private static int typeIndex = 0;
 
     private Type type;
     private EditText nameEditText;
     private EditText valueEditText;
     private Spinner spinner;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +67,9 @@ public class VariableActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         nameEditText = (EditText) findViewById(R.id.name);
         valueEditText = (EditText) findViewById(R.id.value);
+        button = (Button) findViewById(R.id.button);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitle("Variable");
         setSupportActionBar(toolbar);
 
 //        http://www.broculos.net/2013/09/how-to-change-spinner-text-size-color.html
@@ -74,6 +80,7 @@ public class VariableActivity extends AppCompatActivity {
 //                android.R.layout.simple_list_item_1
         );
 
+        // Spinner
         arrayAdapter.setDropDownViewResource(R.layout.spinner_variable_dropdown_item);
         spinner.setAdapter(arrayAdapter);
         spinner.setSelection(typeIndex);
@@ -89,6 +96,39 @@ public class VariableActivity extends AppCompatActivity {
 
             }
         });
+
+        // Button
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Key_Variable, getVariable());
+                setResult(Activity.RESULT_OK/*ResultCode_Create*/, intent);
+//                finishActivity();
+                finish();
+            }
+        });
+
+        initialize();
+    }
+
+    private void initialize() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            int resultCode = intent.getIntExtra(Key_Method, ResultCode_Create);
+            switch (resultCode) {
+                case ResultCode_Create:
+                    button.setText(getString(R.string.button_cation_create));
+                    break;
+            }
+        }
+    }
+
+    private Variable getVariable() {
+        String name = nameEditText.getText().toString();
+        String value = valueEditText.getText().toString();
+        // validation...
+        return Variable.fromType(type, name, value);
     }
 
     private boolean isEmailValid(String email) {

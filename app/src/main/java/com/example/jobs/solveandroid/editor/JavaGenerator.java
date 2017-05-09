@@ -35,9 +35,9 @@ public class JavaGenerator {
         variable.add(new Variable(name, value));
     }
 
-    public void addLocalVariable(String name, float value) {
-        variable.add(new Variable(name, value));
-    }
+//    public void addLocalVariable(String name, float value) {
+//        variable.add(new Variable(name, value));
+//    }
 
     public void addLocalVariable(String name, double value) {
         variable.add(new Variable(name, value));

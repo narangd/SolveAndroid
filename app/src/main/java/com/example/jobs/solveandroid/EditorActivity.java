@@ -1,7 +1,9 @@
 package com.example.jobs.solveandroid;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +26,6 @@ import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
-import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
@@ -36,9 +37,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
+    public static final int RequestCode_Variable_Create = 10;
 
     private JavaGenerator javaGenerator = new JavaGenerator("Main");
     private ProgressDialog progressDialog;
+    private JavaAdapter javaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class EditorActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Loading");
 
+        // Test data...
         javaGenerator.addLocalVariable("name", "sykim");
         javaGenerator.addLocalVariable("count", 10);
         javaGenerator.addLocalVariable("title_of_activity", "title...");
@@ -70,32 +74,36 @@ public class EditorActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        // specify an adapter (see also next example)
-        final JavaAdapter adapter = new JavaAdapter(javaGenerator);
-        recyclerView.setAdapter(adapter);
+        // specify an javaAdapter (see also next example)
+        javaAdapter = new JavaAdapter(javaGenerator);
+        recyclerView.setAdapter(javaAdapter);
 
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
+        final FloatingActionMenu fabAddMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
         FloatingActionButton fabVariable = (FloatingActionButton) findViewById(R.id.fab_variable);
         fabVariable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fabMenu.close(true);
-                new VariableDialog(EditorActivity.this)
-                        .setCreateButton("Create", new VariableDialog.OnPositive() {
-                            @Override
-                            public void onVariable(Variable variable) {
-                                javaGenerator.variable.add(variable);
-                                adapter.notifyItemInserted(javaGenerator.variable.size()-1);
-                            }
-                        })
-                        .show();
+                fabAddMenu.close(true);
+
+                Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
+                intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
+                startActivityForResult(intent, RequestCode_Variable_Create);
+//                new VariableDialog(EditorActivity.this)
+//                        .setCreateButton("Create", new VariableDialog.OnPositive() {
+//                            @Override
+//                            public void onVariable(Variable variable) {
+//                                javaGenerator.variable.add(variable);
+//                                javaAdapter.notifyItemInserted(javaGenerator.variable.size()-1);
+//                            }
+//                        })
+//                        .show();
             }
         });
         final FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
         fabPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabMenu.close(true);
+                fabAddMenu.close(true);
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("Select Variable")
                 .setAdapter(
@@ -109,7 +117,7 @@ public class EditorActivity extends AppCompatActivity {
                             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                                 View root = super.getView(position, convertView, parent);
                                 TextView textView = (TextView) root.findViewById(android.R.id.text1);
-                                Variable variable = getItem(position);
+                                Variable variable = this.getItem(position);
                                 if (textView != null && variable != null) {
                                     textView.setText(variable.name);
                                 }
@@ -119,7 +127,7 @@ public class EditorActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 javaGenerator.command.print(javaGenerator.variable.get(which));
-                                adapter.notifyItemInserted(javaGenerator.size()-1);
+                                javaAdapter.notifyItemInserted(javaGenerator.size()-1);
                             }
                         }
                 )
@@ -179,6 +187,26 @@ public class EditorActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("requestCode : " + requestCode);
+        System.out.println("resultCode : " + resultCode);
+        System.out.println("data : " + data);
+        if (data != null) {
+            System.out.println("data.getExtras() : " + data.getExtras());
+        }
+        switch (requestCode) {
+            case RequestCode_Variable_Create:
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    Variable variable = (Variable) data.getSerializableExtra(VariableActivity.Key_Variable);
+                    javaGenerator.variable.add(variable);
+                    javaAdapter.notifyItemInserted(javaGenerator.variable.size() -1);
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void updateJavaCode(final SetTextable setTextable) {

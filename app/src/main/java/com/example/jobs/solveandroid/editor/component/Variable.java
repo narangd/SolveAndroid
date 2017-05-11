@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @date 2017. 04. 06
  */
 public class Variable implements Comparable<Variable>, Serializable {
-    public final String name;
-    public final Type type;
-    private Object value;
+    public String name;
+    public Type type;
+    public Object value;
 
 //    public Variable(String name, byte integer) {
 //        this.name = name;

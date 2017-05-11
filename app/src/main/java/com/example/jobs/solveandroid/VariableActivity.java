@@ -51,6 +51,8 @@ public class VariableActivity extends AppCompatActivity {
     public static final String Key_Method = "method";
     public static final String Key_Variable = "variable";
     public static final int ResultCode_Create = 10;
+    public static final int ResultCode_Update = 20;
+    public static final int ResultCode_Delete = 30;
     private static int typeIndex = 0;
 
     private Type type;
@@ -58,6 +60,8 @@ public class VariableActivity extends AppCompatActivity {
     private EditText valueEditText;
     private Spinner spinner;
     private Button button;
+
+    private Variable variable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +105,8 @@ public class VariableActivity extends AppCompatActivity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(Key_Variable, getVariable());
+                Intent intent = getIntent();
+                intent.putExtra(Key_Variable, getVariable()); // update
                 setResult(Activity.RESULT_OK/*ResultCode_Create*/, intent);
 //                finishActivity();
                 finish();
@@ -116,10 +120,23 @@ public class VariableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             int resultCode = intent.getIntExtra(Key_Method, ResultCode_Create);
+            variable = (Variable) intent.getSerializableExtra(Key_Variable);
             switch (resultCode) {
                 case ResultCode_Create:
+                    int i=0;
+                    for (Type type : Type.values()) {
+                        if (type == variable.type) {
+                            this.type = type;
+                            spinner.setSelection(i);
+                            break;
+                        }
+                        i++;
+                    }
+                    nameEditText.setText(variable.name);
+                    valueEditText.setText(variable.value.toString());
                     button.setText(getString(R.string.button_cation_create));
                     break;
+//                case ResultU
             }
         }
     }
@@ -127,8 +144,18 @@ public class VariableActivity extends AppCompatActivity {
     private Variable getVariable() {
         String name = nameEditText.getText().toString();
         String value = valueEditText.getText().toString();
+
         // validation...
-        return Variable.fromType(type, name, value);
+
+        Variable createVariable = Variable.fromType(type, name, value);
+        if (variable != null) {
+            variable.type = createVariable.type;
+            variable.name = createVariable.name;
+            variable.value = createVariable.value;
+        } else {
+            variable = createVariable;
+        }
+        return variable;
     }
 
     private boolean isEmailValid(String email) {

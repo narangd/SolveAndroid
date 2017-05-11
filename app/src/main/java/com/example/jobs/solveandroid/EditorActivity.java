@@ -37,7 +37,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
-    public static final int RequestCode_Variable_Create = 10;
+    public static final int RequestCode_Variable = 100;
 
     private JavaGenerator javaGenerator = new JavaGenerator("Main");
     private ProgressDialog progressDialog;
@@ -76,6 +76,26 @@ public class EditorActivity extends AppCompatActivity {
 
         // specify an javaAdapter (see also next example)
         javaAdapter = new JavaAdapter(javaGenerator);
+        javaAdapter.setVariableOnClickListener(new JavaAdapter.OnClickListener() {
+            @Override
+            public void onClick(int pos, Variable variable) {
+
+
+                Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
+                intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
+                intent.putExtra(VariableActivity.Key_Variable, variable);
+                startActivityForResult(intent, RequestCode_Variable);
+//                    new VariableDialog(v.getContext(), variable)
+//                            .setCreateButton("Update", new VariableDialog.OnPositive() {
+//                                @Override
+//                                public void onVariable(Variable variable) {
+//                                    javaGenerator.variable.put(variable);
+//                                    JavaAdapter.this.notifyItemChanged(curpos);
+//                                }
+//                            })
+//                            .show();
+            }
+        });
         recyclerView.setAdapter(javaAdapter);
 
         final FloatingActionMenu fabAddMenu = (FloatingActionMenu) findViewById(R.id.fab_add);
@@ -83,20 +103,11 @@ public class EditorActivity extends AppCompatActivity {
         fabVariable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fabAddMenu.close(true);
+                fabAddMenu.close(false);
 
                 Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
                 intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
-                startActivityForResult(intent, RequestCode_Variable_Create);
-//                new VariableDialog(EditorActivity.this)
-//                        .setCreateButton("Create", new VariableDialog.OnPositive() {
-//                            @Override
-//                            public void onVariable(Variable variable) {
-//                                javaGenerator.variable.add(variable);
-//                                javaAdapter.notifyItemInserted(javaGenerator.variable.size()-1);
-//                            }
-//                        })
-//                        .show();
+                startActivityForResult(intent, RequestCode_Variable);
             }
         });
         final FloatingActionButton fabPrint = (FloatingActionButton) findViewById(R.id.fab_print);
@@ -198,11 +209,16 @@ public class EditorActivity extends AppCompatActivity {
             System.out.println("data.getExtras() : " + data.getExtras());
         }
         switch (requestCode) {
-            case RequestCode_Variable_Create:
+            case RequestCode_Variable:
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     Variable variable = (Variable) data.getSerializableExtra(VariableActivity.Key_Variable);
+//                    switch ()
                     javaGenerator.variable.add(variable);
                     javaAdapter.notifyItemInserted(javaGenerator.variable.size() -1);
+
+                    javaGenerator.variable.put(variable);
+//                    javaAdapter.notifyItemChanged(curpos);
+                    javaAdapter.notifyDataSetChanged();
                 }
                 break;
         }

@@ -1,5 +1,7 @@
 package com.example.jobs.solveandroid.editor;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.jobs.solveandroid.EditorActivity;
 import com.example.jobs.solveandroid.R;
+import com.example.jobs.solveandroid.VariableActivity;
 import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.command.Command;
 import com.example.jobs.solveandroid.editor.component.Variable;
@@ -56,6 +60,9 @@ public class JavaAdapter extends RecyclerView.Adapter {
     }
 
     private JavaGenerator javaGenerator;
+
+    private OnClickListener variableOnClickListener;
+    private OnClickListener commandOnClickListener;
 
     public JavaAdapter(JavaGenerator javaGenerator) {
         this.javaGenerator = javaGenerator;
@@ -109,15 +116,9 @@ public class JavaAdapter extends RecyclerView.Adapter {
             variableHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new VariableDialog(v.getContext(), variable)
-                            .setCreateButton("Update", new VariableDialog.OnPositive() {
-                                @Override
-                                public void onVariable(Variable variable) {
-                                    javaGenerator.variable.put(variable);
-                                    JavaAdapter.this.notifyItemChanged(curpos);
-                                }
-                            })
-                            .show();
+                    if (variableOnClickListener != null) {
+                        variableOnClickListener.onClick(curpos, variable);
+                    }
                 }
             });
         } else if (holder instanceof CommandHolder) {
@@ -140,5 +141,17 @@ public class JavaAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return javaGenerator.size()+1;
+    }
+
+    public void setVariableOnClickListener(OnClickListener onClickListener) {
+        variableOnClickListener = onClickListener;
+    }
+
+    public void setCommandOnClickListener(OnClickListener onClickListener) {
+        commandOnClickListener = onClickListener;
+    }
+
+    public static interface OnClickListener {
+        void onClick(int pos, Variable variable);
     }
 }

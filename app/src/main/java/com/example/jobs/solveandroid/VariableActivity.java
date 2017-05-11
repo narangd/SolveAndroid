@@ -1,48 +1,25 @@
 package com.example.jobs.solveandroid;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.example.jobs.solveandroid.dialog.VariableDialog;
 import com.example.jobs.solveandroid.editor.Type;
 import com.example.jobs.solveandroid.editor.component.Variable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
@@ -50,6 +27,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class VariableActivity extends AppCompatActivity {
     public static final String Key_Method = "method";
     public static final String Key_Variable = "variable";
+    public static final String Key_Position = "position";
     public static final int ResultCode_Create = 10;
     public static final int ResultCode_Update = 20;
     public static final int ResultCode_Delete = 30;
@@ -62,6 +40,7 @@ public class VariableActivity extends AppCompatActivity {
     private Button button;
 
     private Variable variable;
+    private boolean showDelete = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +54,9 @@ public class VariableActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 //        http://www.broculos.net/2013/09/how-to-change-spinner-text-size-color.html
         ArrayAdapter arrayAdapter = ArrayAdapter.createFromResource(
@@ -101,7 +83,7 @@ public class VariableActivity extends AppCompatActivity {
             }
         });
 
-        // Button
+        // Button Create/Update
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +105,10 @@ public class VariableActivity extends AppCompatActivity {
             variable = (Variable) intent.getSerializableExtra(Key_Variable);
             switch (resultCode) {
                 case ResultCode_Create:
+                    button.setText(getString(R.string.button_caption_create));
+                    showDelete = false;
+                    break;
+                case ResultCode_Update:
                     int i=0;
                     for (Type type : Type.values()) {
                         if (type == variable.type) {
@@ -134,11 +120,50 @@ public class VariableActivity extends AppCompatActivity {
                     }
                     nameEditText.setText(variable.name);
                     valueEditText.setText(variable.value.toString());
-                    button.setText(getString(R.string.button_cation_create));
+                    button.setText(getString(R.string.button_caption_update));
                     break;
-//                case ResultU
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (showDelete) {
+            getMenuInflater().inflate(R.menu.menu_variable, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_delete:
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete")
+                        .setMessage("Are you sure you want to delete?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = getIntent();
+                                intent.putExtra(Key_Variable, getVariable()); // update
+                                intent.putExtra(Key_Method, ResultCode_Delete);
+                                setResult(Activity.RESULT_OK/*ResultCode_Create*/, intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private Variable getVariable() {
@@ -149,9 +174,7 @@ public class VariableActivity extends AppCompatActivity {
 
         Variable createVariable = Variable.fromType(type, name, value);
         if (variable != null) {
-            variable.type = createVariable.type;
-            variable.name = createVariable.name;
-            variable.value = createVariable.value;
+            variable.copy(createVariable);
         } else {
             variable = createVariable;
         }

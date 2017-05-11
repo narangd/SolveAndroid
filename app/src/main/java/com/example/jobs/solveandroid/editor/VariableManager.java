@@ -3,9 +3,8 @@ package com.example.jobs.solveandroid.editor;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -13,39 +12,43 @@ import java.util.List;
  * @date 2017. 04. 06
  */
 public class VariableManager {
-    private final HashMap<String, Variable> variableHashMap = new HashMap<>();
     private final ArrayList<Variable> variableArray = new ArrayList<>();
 
     public void remove(Variable variable) {
         variableArray.remove(variable);
-        variableHashMap.remove(variable.name);
     }
 
-    public void add(Variable variable) {
-        if (variableHashMap.get(variable.name) == null) {
-            variableHashMap.put(variable.name, variable);
-            variableArray.add(variable);
-        }
-        System.out.println(Arrays.toString(variableHashMap.values().toArray()));
-        System.out.println(Arrays.toString(variableArray.toArray()));
+    public void insert(Variable variable) {
+//        if (variableHashSet.(variable) == null) {
+//            variableHashSet.put(variable, variable);
+//            variableArray.add(variable);
+//        }
+        variableArray.add(variable);
     }
 
-    public void put(Variable variable) {
-//        variableHashMap.remove(variable);
-//        variableArray.remove(variable);
-        variableHashMap.put(variable.name, variable);
+    public void update(int index, Variable variable) {
+        System.out.println("origin:" + variableArray.get(index));
+        System.out.println("input:" + variable);
+        variableArray.get(index).copy(variable);
+        System.out.println("change:" + index + ", " + variableArray.get(index));
+//        variableHashMap.
+//        if (variableHashMap.get(variable.name) != null) {
+//            variableHashMap.put(variable.name, variable);
+//            variableArray.get(index).copy(variable);
+//            variableArray.add(variable);
+//        }
     }
 
-    public Variable get(String name) {
-        return variableHashMap.get(name);
-    }
+//    public Variable get(String name) {
+//        return variableHashMap.get(name);
+//    }
 
     public Variable get(int index) {
         return variableArray.get(index);
     }
 
     public int size() {
-        return variableHashMap.size();
+        return variableArray.size();
     }
 
     public List<Variable> list() {

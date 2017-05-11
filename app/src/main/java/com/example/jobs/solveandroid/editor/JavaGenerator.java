@@ -16,31 +16,31 @@ public class JavaGenerator {
     }
 
     public void addLocalVariable(String name, byte value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
     public void addLocalVariable(String name, int value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
     public void addLocalVariable(String name, long value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
     public void addLocalVariable(String name, char value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
     public void addLocalVariable(String name, String value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
 //    public void addLocalVariable(String name, float value) {
-//        variable.add(new Variable(name, value));
+//        variable.insert(new Variable(name, value));
 //    }
 
     public void addLocalVariable(String name, double value) {
-        variable.add(new Variable(name, value));
+        variable.insert(new Variable(name, value));
     }
 
     public int size() {

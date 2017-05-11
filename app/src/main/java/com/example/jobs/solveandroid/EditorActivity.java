@@ -79,21 +79,11 @@ public class EditorActivity extends AppCompatActivity {
         javaAdapter.setVariableOnClickListener(new JavaAdapter.OnClickListener() {
             @Override
             public void onClick(int pos, Variable variable) {
-
-
                 Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
-                intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
+                intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Update);
                 intent.putExtra(VariableActivity.Key_Variable, variable);
+                intent.putExtra(VariableActivity.Key_Position, pos);
                 startActivityForResult(intent, RequestCode_Variable);
-//                    new VariableDialog(v.getContext(), variable)
-//                            .setCreateButton("Update", new VariableDialog.OnPositive() {
-//                                @Override
-//                                public void onVariable(Variable variable) {
-//                                    javaGenerator.variable.put(variable);
-//                                    JavaAdapter.this.notifyItemChanged(curpos);
-//                                }
-//                            })
-//                            .show();
             }
         });
         recyclerView.setAdapter(javaAdapter);
@@ -107,6 +97,7 @@ public class EditorActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
                 intent.putExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
+                intent.putExtra(VariableActivity.Key_Position, javaGenerator.variable.size());
                 startActivityForResult(intent, RequestCode_Variable);
             }
         });
@@ -208,17 +199,25 @@ public class EditorActivity extends AppCompatActivity {
         if (data != null) {
             System.out.println("data.getExtras() : " + data.getExtras());
         }
+        if (resultCode != Activity.RESULT_OK || data == null) {
+            return;
+        }
         switch (requestCode) {
             case RequestCode_Variable:
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    Variable variable = (Variable) data.getSerializableExtra(VariableActivity.Key_Variable);
-//                    switch ()
-                    javaGenerator.variable.add(variable);
-                    javaAdapter.notifyItemInserted(javaGenerator.variable.size() -1);
-
-                    javaGenerator.variable.put(variable);
-//                    javaAdapter.notifyItemChanged(curpos);
-                    javaAdapter.notifyDataSetChanged();
+                Variable variable = (Variable) data.getSerializableExtra(VariableActivity.Key_Variable);
+                resultCode = data.getIntExtra(VariableActivity.Key_Method, VariableActivity.ResultCode_Create);
+                int position = data.getIntExtra(VariableActivity.Key_Position, -1);
+                switch (resultCode) {
+                    case VariableActivity.ResultCode_Create:
+                        javaGenerator.variable.insert(variable);
+                        javaAdapter.notifyItemInserted(position);
+                        break;
+                    case VariableActivity.ResultCode_Update:
+                        javaGenerator.variable.update(position, variable);
+                        javaAdapter.notifyItemChanged(position);
+                        break;
+                    case VariableActivity.ResultCode_Delete:
+                        break;
                 }
                 break;
         }

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author sykim
  * @date 2017. 04. 06
  */
-public class Variable implements Comparable<Variable>, Serializable {
+public class Variable implements Serializable {
     public String name;
     public Type type;
     public Object value;
@@ -174,7 +174,7 @@ public class Variable implements Comparable<Variable>, Serializable {
 //                variable = new Variable(name, Long.parseLong(value));
 //                break;
             case Float:
-                variable = new Variable(name, Float.parseFloat(value));
+                variable = new Variable(name, Double.parseDouble(value));
                 break;
 //            case Double:
 //                variable = new Variable(name, Double.parseDouble(value));
@@ -192,8 +192,14 @@ public class Variable implements Comparable<Variable>, Serializable {
         return variable;
     }
 
-    @Override
-    public int compareTo(@NonNull Variable o) {
-        return name.compareTo(o.name);
+//    @Override
+//    public int compareTo(@NonNull Variable o) {
+//        return name.compareTo(o.name);
+//    }
+
+    public void copy(Variable to) {
+        type = to.type;
+        name = to.name;
+        value = to.value;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +85,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
                 return new CommandHolder(v);
             case SpaceType:
             default:
-                v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.holder_fab_space, parent, false);
-                return new RecyclerView.ViewHolder(v) {};
+                return null;
         }
     }
 
@@ -96,15 +95,13 @@ public class JavaAdapter extends RecyclerView.Adapter {
             return VariableHolder.TYPE;
         } else if (position < javaGenerator.size()){
             return CommandHolder.TYPE;
-        } else {
-            return SpaceType;
         }
-//        return super.getItemViewType(position);
+        return super.getItemViewType(position);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        System.out.println("create " + position);
+        System.out.println("holder create " + position);
         if (holder instanceof VariableHolder) {
             final int curpos = position;
             final Variable variable = javaGenerator.variable.get(position);
@@ -117,6 +114,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (variableOnClickListener != null) {
+                        Log.i("JavaAdapter", "index:" + curpos);
                         variableOnClickListener.onClick(curpos, variable);
                     }
                 }
@@ -140,7 +138,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return javaGenerator.size()+1;
+        return javaGenerator.size();
     }
 
     public void setVariableOnClickListener(OnClickListener onClickListener) {
@@ -151,7 +149,7 @@ public class JavaAdapter extends RecyclerView.Adapter {
         commandOnClickListener = onClickListener;
     }
 
-    public static interface OnClickListener {
+    public interface OnClickListener {
         void onClick(int pos, Variable variable);
     }
 }

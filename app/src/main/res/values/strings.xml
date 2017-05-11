@@ -16,5 +16,7 @@
         completions."
     </string>
 
-    <string name="button_cation_create">Create</string>
+    <string name="button_caption_create">Create</string>
+    <string name="button_caption_update">Update</string>
+    <string name="action_delete">Delete</string>
 </resources>

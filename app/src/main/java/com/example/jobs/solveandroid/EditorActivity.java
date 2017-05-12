@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,18 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.dialog.ConsoleDialog;
 import com.example.jobs.solveandroid.dialog.SourceDialog;
-import com.example.jobs.solveandroid.editor.JavaAdapter;
+import com.example.jobs.solveandroid.editor.Source;
+import com.example.jobs.solveandroid.editor.adapter.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
 import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
-import com.example.jobs.solveandroid.util.ViewUtil;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -40,6 +36,7 @@ import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
     public static final int RequestCode_Variable = 100;
+    public static final String Key_RequestSource = "source";
 
     private JavaGenerator javaGenerator = new JavaGenerator("Main");
     private ProgressDialog progressDialog;
@@ -161,16 +158,29 @@ public class EditorActivity extends AppCompatActivity {
             case R.id.action_print:
                 updateJavaCode(new SetTextable() {
                     @Override
-                    public void setText(CharSequence charSequence) {
+                    public void setText(final Source source) {
+                        boolean enable = false;
+                        if (getIntent() != null) {
+                            enable = getIntent().getStringExtra(Key_RequestSource) != null;
+                        }
                         new SourceDialog(EditorActivity.this)
-                                .setSource(charSequence)
+                                .setSource(source.html)
+                                .setSendButton(enable, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent();
+                                        intent.putExtra(Key_RequestSource, source.code);
+                                        setResult(Activity.RESULT_OK, intent);
+                                        finish();
+                                    }
+                                })
                                 .show();
                     }
                 });
                 return true;
             case R.id.action_play:
                 new ConsoleDialog(EditorActivity.this)
-                        .print("asdfasdfasdfasdfasdfasdfsdfsdfadsfasdfasdfasdf\n14234123413456345982746305186398471.")
+                        .print(javaGenerator.toConsole())
                         .show();
                 return true;
         }
@@ -216,7 +226,7 @@ public class EditorActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                String content = javaGenerator.toSource();
+                final String content = javaGenerator.toSource();
                 String highlighted = javaHighlighter(content);
                 final CharSequence charSequence;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -227,7 +237,10 @@ public class EditorActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setTextable.setText(charSequence);
+                        Source source = new Source();
+                        source.code = content;
+                        source.html = charSequence;
+                        setTextable.setText(source);
                         progressDialog.hide();
                     }
                 });
@@ -235,7 +248,7 @@ public class EditorActivity extends AppCompatActivity {
         });
     }
     private interface SetTextable {
-        void setText(CharSequence charSequence);
+        void setText(Source source);
     }
 
     private String javaHighlighter(String string) {

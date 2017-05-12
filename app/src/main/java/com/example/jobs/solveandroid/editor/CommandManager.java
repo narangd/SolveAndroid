@@ -1,24 +1,23 @@
 package com.example.jobs.solveandroid.editor;
 
+import com.example.jobs.solveandroid.editor.adapter.JavaSourceAdapter;
 import com.example.jobs.solveandroid.editor.command.Command;
+import com.example.jobs.solveandroid.editor.adapter.ConsoleAdapter;
 import com.example.jobs.solveandroid.editor.command.DisplayCommand;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sykim
  * @date 2017. 04. 06
  */
-public class CommandManager implements JavaSourceAdapter {
+public class CommandManager implements JavaSourceAdapter, ConsoleAdapter {
     private ArrayList<Command> commands = new ArrayList<>();
 
     public void print(Variable variable) {
-        commands.add(new DisplayCommand(variable, false));
-    }
-
-    public void println(Variable variable) {
-        commands.add(new DisplayCommand(variable, true));
+        commands.add(new DisplayCommand(variable));
     }
 
 //    public void remove(int index) {
@@ -31,6 +30,10 @@ public class CommandManager implements JavaSourceAdapter {
 
     public Command get(int index) {
         return commands.get(index);
+    }
+
+    public List<Command> list() {
+        return commands;
     }
 
     @Override
@@ -53,6 +56,13 @@ public class CommandManager implements JavaSourceAdapter {
             command.toSource(builder);
 
             builder.append(";\n");
+        }
+    }
+
+    @Override
+    public void toConsole(StringBuilder builder) {
+        for (Command command : commands) {
+            command.toConsole(builder);
         }
     }
 }

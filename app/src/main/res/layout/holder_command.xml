@@ -26,9 +26,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/parameter"
         android:lines="1"
-        android:layout_gravity="right"
         android:ellipsize="end"
-        android:paddingLeft="32dp"
+        android:paddingLeft="24dp"
         style="@style/TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>

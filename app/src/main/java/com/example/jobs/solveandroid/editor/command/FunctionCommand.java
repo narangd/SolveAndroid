@@ -1,6 +1,5 @@
 package com.example.jobs.solveandroid.editor.command;
 
-import com.example.jobs.solveandroid.editor.JavaSourceAdapter;
 import com.example.jobs.solveandroid.editor.Type;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
@@ -47,7 +46,24 @@ public class FunctionCommand extends Command {
                 .append(" )");
     }
 
+    @Override
+    public void toConsole(StringBuilder builder) {
+
+    }
+
     public String getName() {
         return name;
+    }
+
+    public Type getReturnType() {
+        return returnType;
+    }
+
+    public Variable[] getParameters() {
+        return parameters;
+    }
+
+    public String getParameterString() {
+        return parameterString;
     }
 }

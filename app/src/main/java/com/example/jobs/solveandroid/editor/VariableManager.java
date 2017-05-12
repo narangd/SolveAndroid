@@ -1,10 +1,9 @@
 package com.example.jobs.solveandroid.editor;
 
+import com.example.jobs.solveandroid.editor.adapter.JavaSourceAdapter;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 /**

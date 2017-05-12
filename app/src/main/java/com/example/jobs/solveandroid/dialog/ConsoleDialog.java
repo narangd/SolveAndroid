@@ -22,7 +22,7 @@ public class ConsoleDialog {
                 .inflate(R.layout.dialog_console, null, false);
         sourceView = (TextView) root.findViewById(R.id.console_view);
         builder = new AlertDialog.Builder(context)
-                .setTitle("Java Source")
+                .setTitle("Console")
                 .setView(root);
     }
 

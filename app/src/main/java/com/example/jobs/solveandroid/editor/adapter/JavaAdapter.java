@@ -1,20 +1,16 @@
-package com.example.jobs.solveandroid.editor;
+package com.example.jobs.solveandroid.editor.adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.jobs.solveandroid.EditorActivity;
 import com.example.jobs.solveandroid.R;
-import com.example.jobs.solveandroid.VariableActivity;
-import com.example.jobs.solveandroid.dialog.VariableDialog;
+import com.example.jobs.solveandroid.editor.JavaGenerator;
+import com.example.jobs.solveandroid.editor.Type;
 import com.example.jobs.solveandroid.editor.command.Command;
+import com.example.jobs.solveandroid.editor.command.FunctionCommand;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
 
@@ -26,12 +22,12 @@ public class JavaAdapter extends RecyclerView.Adapter {
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     private static class VariableHolder extends RecyclerView.ViewHolder {
-        public static final int TYPE = 10;
+        static final int TYPE = 10;
         View root;
         TextView typeView;
         TextView nameView;
         TextView valueView;
-        public VariableHolder(View root) {
+        VariableHolder(View root) {
             super(root);
             this.root = root;
             typeView = (TextView) root.findViewById(R.id.type);
@@ -44,17 +40,26 @@ public class JavaAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private static class CommandHolder extends RecyclerView.ViewHolder {
-        public static final int TYPE = 20;
+    private static class FunctionHolder extends RecyclerView.ViewHolder {
+        static final int TYPE = 20;
 
         View root;
+        TextView returnTypeView;
         TextView nameView;
         TextView parameterView;
-        public CommandHolder(View root) {
+        FunctionHolder(View root) {
             super(root);
             this.root = root;
+            returnTypeView = (TextView) root.findViewById(R.id.return_type);
             nameView = (TextView) root.findViewById(R.id.name);
             parameterView = (TextView) root.findViewById(R.id.parameter);
+        }
+    }
+
+    private static class CalculateHolder extends RecyclerView.ViewHolder {
+        static final int TYPE = 30;
+        CalculateHolder(View itemView) {
+            super(itemView);
         }
     }
 
@@ -77,10 +82,10 @@ public class JavaAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.holder_variable, parent, false);
                 return new VariableHolder(v);
-            case CommandHolder.TYPE:
+            case FunctionHolder.TYPE:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.holder_command, parent, false);
-                return new CommandHolder(v);
+                return new FunctionHolder(v);
             case SpaceType:
             default:
                 return null;
@@ -92,7 +97,12 @@ public class JavaAdapter extends RecyclerView.Adapter {
         if (position < javaGenerator.variable.size()) {
             return VariableHolder.TYPE;
         } else if (position < javaGenerator.size()){
-            return CommandHolder.TYPE;
+            Command command = javaGenerator.command.get(position - javaGenerator.variable.size());
+            if (command instanceof FunctionCommand) {
+                return FunctionHolder.TYPE;
+            } else {
+                return CalculateHolder.TYPE;
+            }
         }
         return super.getItemViewType(position);
     }
@@ -116,15 +126,18 @@ public class JavaAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
-        } else if (holder instanceof CommandHolder) {
+        } else if (holder instanceof FunctionHolder) {
             final int index = position - javaGenerator.variable.size();
-            final Command command = javaGenerator.command.get(index);
-            CommandHolder commandHolder = (CommandHolder) holder;
-            commandHolder.nameView.setText(
-                    javaGenerator.command.get(index).toString()
-            );
-            commandHolder.parameterView.setText("-");
-            commandHolder.root.setOnClickListener(new View.OnClickListener() {
+            final FunctionCommand command = (FunctionCommand) javaGenerator.command.get(index);
+            FunctionHolder functionHolder = (FunctionHolder) holder;
+            if (command.getReturnType() == Type.Void) {
+                functionHolder.returnTypeView.setVisibility(View.GONE);
+            }
+            functionHolder.returnTypeView.setText(command.getReturnType().toString());
+            functionHolder.nameView.setText( command.getName() );
+            String parameter = "( " + command.getParameterString() + " )";
+            functionHolder.parameterView.setText( parameter );
+            functionHolder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (commandOnClickListener != null) {

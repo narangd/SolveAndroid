@@ -1,5 +1,6 @@
 package com.example.jobs.solveandroid.dialog;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -28,6 +29,13 @@ public class SourceDialog {
 
     public SourceDialog setSource(CharSequence source) {
         sourceView.setText(source);
+        return this;
+    }
+
+    public SourceDialog setSendButton(boolean enable, Dialog.OnClickListener onClickListener) {
+        if (enable) {
+            builder.setPositiveButton("Send", onClickListener);
+        }
         return this;
     }
 

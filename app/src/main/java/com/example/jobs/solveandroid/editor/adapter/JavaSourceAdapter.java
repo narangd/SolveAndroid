@@ -1,4 +1,4 @@
-package com.example.jobs.solveandroid.editor;
+package com.example.jobs.solveandroid.editor.adapter;
 
 /**
  * Created by jobs on 2017. 5. 12..

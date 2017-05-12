@@ -70,6 +70,12 @@ public class JavaGenerator {
         return builder.toString();
     }
 
+    public String toConsole() {
+        StringBuilder builder = new StringBuilder();
+        command.toConsole(builder);
+        return builder.toString();
+    }
+
 //    @Override
 //    public final String toString() {
 //        return "public class " + title + " {\n" +

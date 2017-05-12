@@ -1,6 +1,5 @@
 package com.example.jobs.solveandroid.editor.command;
 
-import com.example.jobs.solveandroid.editor.JavaSourceAdapter;
 import com.example.jobs.solveandroid.editor.Type;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
@@ -9,18 +8,24 @@ import com.example.jobs.solveandroid.editor.component.Variable;
  * @date 2017. 04. 06
  */
 public class DisplayCommand extends FunctionCommand {
-//    private Variable variable;
-    private boolean newLine;
 
-    public DisplayCommand(Variable variable, boolean newLine) {
-        super("Display" + (newLine?"NewLine":""), Type.Void, variable);
-        this.newLine = newLine;
+    private Variable variable;
+
+    public DisplayCommand(Variable variable) {
+        super("Display", Type.Void, variable);
+        this.variable = variable;
     }
 
     @Override
     public void toSource(StringBuilder builder) {
-        builder.append(newLine ? "System.out.println( " : "System.out.print( ")
+        builder.append("System.out.println( ")
                 .append(parameterString)
                 .append(" )");
+    }
+
+    @Override
+    public void toConsole(StringBuilder builder) {
+        builder.append(variable.value)
+                .append("\n");
     }
 }

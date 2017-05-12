@@ -47,16 +47,39 @@ public class JavaGenerator {
         return variable.size() + command.size();
     }
 
-    @Override
-    public final String toString() {
-        return "public class " + title + " {\n" +
-                " /** main */\n" +
-                " public static void main(String[] args) {\n" +
-                "  /** variables */\n" +
-                variable.definition() +
-                "  /** command */\n" +
-                command +
-                " } /** end of main */\n" +
-                "}";
+    public String toSource() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("public class ").append(title).append(" {\n")
+                .append(" /** main */\n")
+                .append(" public static void main(String[] args) {\n")
+                .append("  /** variables */\n");
+
+        variable.toSource(builder);
+
+        builder
+                .append("  /** command */\n");
+
+        command.toSource(builder);
+
+        builder
+                .append(" } /** end of main */\n")
+                .append("}");
+
+
+
+        return builder.toString();
     }
+
+//    @Override
+//    public final String toString() {
+//        return "public class " + title + " {\n" +
+//                " /** main */\n" +
+//                " public static void main(String[] args) {\n" +
+//                "  /** variables */\n" +
+//                variable.definition() +
+//                "  /** command */\n" +
+//                command +
+//                " } /** end of main */\n" +
+//                "}";
+//    }
 }

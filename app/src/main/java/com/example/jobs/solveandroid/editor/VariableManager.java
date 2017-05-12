@@ -11,7 +11,7 @@ import java.util.List;
  * @author sykim
  * @date 2017. 04. 06
  */
-public class VariableManager {
+public class VariableManager implements JavaSourceAdapter {
     private final ArrayList<Variable> variableArray = new ArrayList<>();
 
     public void remove(Variable variable) {
@@ -55,10 +55,25 @@ public class VariableManager {
         return variableArray;
     }
 
-    public String definition() {
-        StringBuilder stringBuilder = new StringBuilder();
+//    public String definition() {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (Variable variable : variableArray) {
+//            stringBuilder
+//                    .append("  ")
+//                    .append(variable.type)
+//                    .append(" ")
+//                    .append(variable.name)
+//                    .append(" = ")
+//                    .append(variable)
+//                    .append(";\n");
+//        }
+//        return stringBuilder.toString();
+//    }
+
+    @Override
+    public void toSource(StringBuilder builder) {
         for (Variable variable : variableArray) {
-            stringBuilder
+            builder
                     .append("  ")
                     .append(variable.type)
                     .append(" ")
@@ -67,6 +82,6 @@ public class VariableManager {
                     .append(variable)
                     .append(";\n");
         }
-        return stringBuilder.toString();
+
     }
 }

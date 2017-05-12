@@ -48,13 +48,11 @@ public class JavaAdapter extends RecyclerView.Adapter {
         public static final int TYPE = 20;
 
         View root;
-        TextView returnTypeView;
         TextView nameView;
         TextView parameterView;
         public CommandHolder(View root) {
             super(root);
             this.root = root;
-            returnTypeView = (TextView) root.findViewById(R.id.return_type);
             nameView = (TextView) root.findViewById(R.id.name);
             parameterView = (TextView) root.findViewById(R.id.parameter);
         }
@@ -62,8 +60,8 @@ public class JavaAdapter extends RecyclerView.Adapter {
 
     private JavaGenerator javaGenerator;
 
-    private OnClickListener variableOnClickListener;
-    private OnClickListener commandOnClickListener;
+    private OnClickListener<Variable> variableOnClickListener;
+    private OnClickListener<Command> commandOnClickListener;
 
     public JavaAdapter(JavaGenerator javaGenerator) {
         this.javaGenerator = javaGenerator;
@@ -103,8 +101,8 @@ public class JavaAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         System.out.println("holder create " + position);
         if (holder instanceof VariableHolder) {
-            final int curpos = position;
-            final Variable variable = javaGenerator.variable.get(position);
+            final int index = position;
+            final Variable variable = javaGenerator.variable.get(index);
 
             VariableHolder variableHolder = (VariableHolder) holder;
             variableHolder.typeView.setText(variable.type.toString());
@@ -114,15 +112,14 @@ public class JavaAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (variableOnClickListener != null) {
-                        Log.i("JavaAdapter", "index:" + curpos);
-                        variableOnClickListener.onClick(curpos, variable);
+                        variableOnClickListener.onClick(index, variable);
                     }
                 }
             });
         } else if (holder instanceof CommandHolder) {
-            int index = position - javaGenerator.variable.size();
+            final int index = position - javaGenerator.variable.size();
+            final Command command = javaGenerator.command.get(index);
             CommandHolder commandHolder = (CommandHolder) holder;
-            commandHolder.returnTypeView.setText("void");
             commandHolder.nameView.setText(
                     javaGenerator.command.get(index).toString()
             );
@@ -130,7 +127,9 @@ public class JavaAdapter extends RecyclerView.Adapter {
             commandHolder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (commandOnClickListener != null) {
+                        commandOnClickListener.onClick(index, command);
+                    }
                 }
             });
         }
@@ -141,15 +140,15 @@ public class JavaAdapter extends RecyclerView.Adapter {
         return javaGenerator.size();
     }
 
-    public void setVariableOnClickListener(OnClickListener onClickListener) {
+    public void setVariableOnClickListener(OnClickListener<Variable> onClickListener) {
         variableOnClickListener = onClickListener;
     }
 
-    public void setCommandOnClickListener(OnClickListener onClickListener) {
+    public void setCommandOnClickListener(OnClickListener<Command> onClickListener) {
         commandOnClickListener = onClickListener;
     }
 
-    public interface OnClickListener {
-        void onClick(int pos, Variable variable);
+    public interface OnClickListener<T> {
+        void onClick(int pos, T t);
     }
 }

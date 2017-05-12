@@ -1,17 +1,25 @@
 package com.example.jobs.solveandroid.editor.command;
 
+import com.example.jobs.solveandroid.editor.JavaSourceAdapter;
 import com.example.jobs.solveandroid.editor.Type;
 import com.example.jobs.solveandroid.editor.component.Variable;
 
+/**
+ * functoin run
+ * f()
+ * f(1)
+ * f("a")
+ * ...
+ */
 public class FunctionCommand extends Command {
-    private String name;
-    private Type type;
-    Variable[] parameters;
-    String parameter = "";
+    protected String name;
+    protected Type returnType;
+    protected Variable[] parameters;
+    protected String parameterString = "";
 
-    public FunctionCommand(String name, Type type, Variable... parameters) {
+    public FunctionCommand(String name, Type returnType, Variable... parameters) {
         this.name = name;
-        this.type = type;
+        this.returnType = returnType;
         this.parameters = parameters;
 
         boolean first = true;
@@ -19,15 +27,27 @@ public class FunctionCommand extends Command {
             if (first) {
                 first = false;
             } else {
-                parameter += ", ";
+                parameterString += ", ";
             }
-            parameter += variable.name;
+            parameterString += variable.name;
         }
     }
 
     @Override
     public String toString() {
 
-        return name + "( "+ parameter + " )";
+        return name + "( "+ parameterString + " )";
+    }
+
+    @Override
+    public void toSource(StringBuilder builder) {
+        builder.append(name)
+                .append("( ")
+                .append(parameterString)
+                .append(" )");
+    }
+
+    public String getName() {
+        return name;
     }
 }

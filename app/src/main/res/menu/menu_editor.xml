@@ -8,9 +8,15 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_print"
-        android:title="Display"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_print"
+    <item android:id="@+id/action_play"
+        android:title="@string/action_play"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_play"
         app:showAsAction="always" />
+
+    <item android:id="@+id/action_print"
+        android:title="@string/action_print"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_print"
+        app:showAsAction="ifRoom" />
 </menu>

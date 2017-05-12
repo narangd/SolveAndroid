@@ -26,6 +26,8 @@ import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.example.jobs.solveandroid.dialog.ConsoleDialog;
+import com.example.jobs.solveandroid.dialog.SourceDialog;
 import com.example.jobs.solveandroid.editor.JavaAdapter;
 import com.example.jobs.solveandroid.editor.JavaGenerator;
 import com.example.jobs.solveandroid.editor.component.Variable;
@@ -76,7 +78,7 @@ public class EditorActivity extends AppCompatActivity {
 
         // specify an javaAdapter (see also next example)
         javaAdapter = new JavaAdapter(javaGenerator);
-        javaAdapter.setVariableOnClickListener(new JavaAdapter.OnClickListener() {
+        javaAdapter.setVariableOnClickListener(new JavaAdapter.OnClickListener<Variable>() {
             @Override
             public void onClick(int pos, Variable variable) {
                 Intent intent = new Intent(EditorActivity.this, VariableActivity.class);
@@ -160,31 +162,16 @@ public class EditorActivity extends AppCompatActivity {
                 updateJavaCode(new SetTextable() {
                     @Override
                     public void setText(CharSequence charSequence) {
-                        LinearLayout linearLayout = new LinearLayout(EditorActivity.this);
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        Space space = new Space(EditorActivity.this);
-                        linearLayout.addView(space);
-                        space.setMinimumHeight(ViewUtil.dp2Pixel(EditorActivity.this, 20));
-                        ScrollView scrollView = new ScrollView(EditorActivity.this);
-                        linearLayout.addView(scrollView);
-                        TextView textView = new TextView(EditorActivity.this);
-                        scrollView.addView(textView);
-                        textView.setBackgroundColor(
-                                ContextCompat.getColor(EditorActivity.this, R.color.darcula_editor_background)
-                        );
-                        textView.setPadding(
-                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
-                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
-                                ViewUtil.dp2Pixel(EditorActivity.this, 8),
-                                ViewUtil.dp2Pixel(EditorActivity.this, 8)
-                        );
-                        textView.setText(charSequence);
-                        new AlertDialog.Builder(EditorActivity.this)
-                                .setTitle("Java Source")
-                                .setView(linearLayout)
+                        new SourceDialog(EditorActivity.this)
+                                .setSource(charSequence)
                                 .show();
                     }
                 });
+                return true;
+            case R.id.action_play:
+                new ConsoleDialog(EditorActivity.this)
+                        .print("asdfasdfasdfasdfasdfasdfsdfsdfadsfasdfasdfasdf\n14234123413456345982746305186398471.")
+                        .show();
                 return true;
         }
 
@@ -229,7 +216,7 @@ public class EditorActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                String content = javaGenerator.toString();
+                String content = javaGenerator.toSource();
                 String highlighted = javaHighlighter(content);
                 final CharSequence charSequence;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

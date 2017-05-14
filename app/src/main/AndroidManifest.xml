@@ -27,7 +27,7 @@
         <activity
             android:name=".VariableActivity"
             android:label="@string/title_activity_variable"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/VariableTheme"/>
     </application>
 
 </manifest>

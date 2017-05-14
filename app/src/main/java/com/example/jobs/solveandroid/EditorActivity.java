@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.example.jobs.solveandroid.highlighter.PrettifyHighlighter;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class EditorActivity extends AppCompatActivity {
@@ -183,6 +185,12 @@ public class EditorActivity extends AppCompatActivity {
                         .print(javaGenerator.toConsole())
                         .show();
                 return true;
+            case R.id.action_refresh:
+//                javaAdapter.notifyDataSetChanged();
+                new AlertDialog.Builder(this)
+                        .setMessage(Arrays.toString(javaGenerator.variable.list().toArray()))
+                        .show();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -214,6 +222,10 @@ public class EditorActivity extends AppCompatActivity {
                         javaAdapter.notifyItemChanged(position);
                         break;
                     case VariableActivity.ResultCode_Delete:
+                        Log.i("JavaAdapter", "count:" +javaAdapter.getItemCount());
+                        Log.i("Variables", Arrays.toString(javaGenerator.variable.list().toArray()));
+                        javaGenerator.variable.delete(position);
+                        javaAdapter.notifyItemRemoved(position);
                         break;
                 }
                 break;

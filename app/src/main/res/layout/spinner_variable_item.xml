@@ -6,4 +6,5 @@
     android:textSize="16sp"
     android:padding="8dp"
     android:text="preview"
+    android:background="@color/variable_accent"
     android:textColor="#fff"/>

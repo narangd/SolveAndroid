@@ -8,6 +8,6 @@
     android:text="preview"
     android:ellipsize="marquee"
     android:padding="8dp"
-    android:background="@color/java_com"
+    android:background="@color/variable_accent"
     android:textColor="#fff"
     android:textSize="16sp"/>

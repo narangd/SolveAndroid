@@ -18,14 +18,13 @@
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/java_com"
+            android:background="@color/variable_accent"
             android:layout_margin="12dp"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:theme="@style/VariableInputLayout">
+            android:layout_margin="@dimen/activity_padding">
 
             <EditText
                 android:layout_width="match_parent"
@@ -41,7 +40,7 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/VariableInputLayout">
+            android:layout_margin="@dimen/activity_padding">
 
             <EditText
                 android:layout_width="match_parent"
@@ -67,9 +66,13 @@
                 android:textColor="@color/java_white"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/activity_item_margin_button"
-                android:background="@color/java_com"/>
+                android:background="@color/variable_accent"/>
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
     </LinearLayout>
 

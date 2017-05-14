@@ -11,52 +11,52 @@ import java.util.List;
  * @date 2017. 04. 06
  */
 public class VariableManager implements JavaSourceAdapter {
-    private final ArrayList<Variable> variableArray = new ArrayList<>();
+    private final ArrayList<Variable> variables = new ArrayList<>();
 
     public void remove(Variable variable) {
-        variableArray.remove(variable);
+        variables.remove(variable);
     }
 
     public void insert(Variable variable) {
 //        if (variableHashSet.(variable) == null) {
 //            variableHashSet.put(variable, variable);
-//            variableArray.add(variable);
+//            variables.add(variable);
 //        }
-        variableArray.add(variable);
+        variables.add(variable);
     }
 
     public void update(int index, Variable variable) {
-        System.out.println("origin:" + variableArray.get(index));
+        System.out.println("origin:" + variables.get(index));
         System.out.println("input:" + variable);
-        variableArray.get(index).copy(variable);
-        System.out.println("change:" + index + ", " + variableArray.get(index));
+        variables.get(index).copy(variable);
+        System.out.println("change:" + index + ", " + variables.get(index));
 //        variableHashMap.
 //        if (variableHashMap.get(variable.name) != null) {
 //            variableHashMap.put(variable.name, variable);
-//            variableArray.get(index).copy(variable);
-//            variableArray.add(variable);
+//            variables.get(index).copy(variable);
+//            variables.add(variable);
 //        }
     }
 
-//    public Variable get(String name) {
-//        return variableHashMap.get(name);
-//    }
+    public Variable delete(int position) {
+        return variables.remove(position);
+    }
 
     public Variable get(int index) {
-        return variableArray.get(index);
+        return variables.get(index);
     }
 
     public int size() {
-        return variableArray.size();
+        return variables.size();
     }
 
     public List<Variable> list() {
-        return variableArray;
+        return variables;
     }
 
 //    public String definition() {
 //        StringBuilder stringBuilder = new StringBuilder();
-//        for (Variable variable : variableArray) {
+//        for (Variable variable : variables) {
 //            stringBuilder
 //                    .append("  ")
 //                    .append(variable.type)
@@ -71,7 +71,7 @@ public class VariableManager implements JavaSourceAdapter {
 
     @Override
     public void toSource(StringBuilder builder) {
-        for (Variable variable : variableArray) {
+        for (Variable variable : variables) {
             builder
                     .append("  ")
                     .append(variable.type)

@@ -21,4 +21,9 @@
     <color name="java_str_dark">#2E7D32</color><!--008000-->
     <color name="java_pun">#E8BF6A</color>
     <color name="java_pln">#A9B7C6</color>
+
+    <color name="variable_accent">@color/blue_a200</color>
+    
+    <color name="blue_a100">#82B1FF</color>
+    <color name="blue_a200">#448AFF</color>
 </resources>

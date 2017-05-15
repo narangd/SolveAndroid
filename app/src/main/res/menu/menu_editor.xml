@@ -9,13 +9,13 @@
         app:showAsAction="never" />
 
     <item android:id="@+id/action_play"
-        android:title="@string/action_play"
+        android:title="@string/action_console"
         android:orderInCategory="200"
         android:icon="@drawable/ic_console"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_print"
-        android:title="@string/action_print"
+    <item android:id="@+id/action_source"
+        android:title="@string/action_source"
         android:orderInCategory="200"
         android:icon="@drawable/ic_file_document_box"
         app:showAsAction="ifRoom" />

@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jobs.solveandroid.dialog.ConsoleDialog;
+import com.example.jobs.solveandroid.dialog.DisplayDialog;
 import com.example.jobs.solveandroid.dialog.SourceDialog;
 import com.example.jobs.solveandroid.editor.Source;
 import com.example.jobs.solveandroid.editor.adapter.JavaAdapter;
@@ -107,34 +108,20 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fabAddMenu.close(true);
-                new AlertDialog.Builder(v.getContext())
-                        .setTitle("Select Variable")
-                .setAdapter(
-                        new ArrayAdapter<Variable>(
-                                v.getContext(),
-                                android.R.layout.simple_list_item_1,
-                                javaGenerator.variable.list()
-                        ) {
-                            @NonNull
-                            @Override
-                            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                                View root = super.getView(position, convertView, parent);
-                                TextView textView = (TextView) root.findViewById(android.R.id.text1);
-                                Variable variable = this.getItem(position);
-                                if (textView != null && variable != null) {
-                                    textView.setText(variable.name);
-                                }
-                                return root;
-                            }
-                        }, new DialogInterface.OnClickListener() {
+                new DisplayDialog(v.getContext())
+                        .setVariableList(javaGenerator.variable.list())
+                        .setOnClickListener(new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                javaGenerator.command.print(javaGenerator.variable.get(which));
-                                javaAdapter.notifyItemInserted(javaGenerator.size()-1);
+                                if (which == 0) {
+                                    javaGenerator.command.println();
+                                } else {
+                                    javaGenerator.command.print(javaGenerator.variable.get(which));
+                                }
+                                javaAdapter.notifyItemInserted(javaGenerator.size() - 1);
                             }
-                        }
-                )
-                .show();
+                        })
+                        .show();
             }
         });
     }
@@ -157,7 +144,7 @@ public class EditorActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_settings:
                 return true;
-            case R.id.action_print:
+            case R.id.action_source:
                 updateJavaCode(new SetTextable() {
                     @Override
                     public void setText(final Source source) {

@@ -18,8 +18,9 @@
 
     <string name="button_caption_create">Create</string>
     <string name="button_caption_update">Update</string>
+
     <string name="action_delete">Delete</string>
-    <string name="action_play">Play</string>
-    <string name="action_print">Display</string>
+    <string name="action_console">Console</string>
+    <string name="action_source">Source</string>
     <string name="action_refresh">Refresh</string>
 </resources>

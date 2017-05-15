@@ -20,6 +20,10 @@ public class CommandManager implements JavaSourceAdapter, ConsoleAdapter {
         commands.add(new DisplayCommand(variable));
     }
 
+    public void println() {
+        commands.add(new DisplayCommand());
+    }
+
 //    public void remove(int index) {
 //        commands.remove(index);
 //    }

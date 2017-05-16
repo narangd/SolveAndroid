@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ public class VariableActivity extends AppCompatActivity {
 
     private Variable variable;
     private boolean showDelete = true;
+    private SwitchCompat valueSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class VariableActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         nameEditText = (EditText) findViewById(R.id.name);
         valueEditText = (EditText) findViewById(R.id.value);
+        valueSwitch = (SwitchCompat) findViewById(R.id.switch_value);
         button = (Button) findViewById(R.id.button);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,6 +79,42 @@ public class VariableActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 type = Type.values()[position];
                 typeIndex = position;
+                switch (type) {
+                    case Integer:
+                        valueEditText.setVisibility(View.VISIBLE);
+                        valueEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                        valueSwitch.setVisibility(View.GONE);
+                        break;
+                    case Character:
+                        valueEditText.setVisibility(View.VISIBLE);
+                        valueEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                        valueSwitch.setVisibility(View.GONE);
+                        break;
+                    case String:
+                        valueEditText.setVisibility(View.VISIBLE);
+                        valueEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                        valueSwitch.setVisibility(View.GONE);
+                        break;
+                    case Float:
+                        valueEditText.setVisibility(View.VISIBLE);
+                        valueEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        valueSwitch.setVisibility(View.GONE);
+                        break;
+                    case Boolean:
+                        valueEditText.setVisibility(View.GONE);
+                        valueSwitch.setVisibility(View.VISIBLE);
+                        break;
+                }
+
+                String value = valueEditText.getText().toString();
+                if (type == Type.Boolean) {
+                    value = valueSwitch.isChecked() + "";
+                }
+
+                if (!Variable.validate(type, value)) {
+
+                }
+
             }
 
             @Override
@@ -169,6 +209,9 @@ public class VariableActivity extends AppCompatActivity {
     private Variable getVariable() {
         String name = nameEditText.getText().toString();
         String value = valueEditText.getText().toString();
+        if (type == Type.Boolean) {
+            value = valueSwitch.isChecked() + "";
+        }
 
         // validation...
 

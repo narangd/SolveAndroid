@@ -192,6 +192,15 @@ public class Variable implements Serializable {
         return variable;
     }
 
+    public static boolean validate(Type type, String value) {
+        try {
+            fromType(type, "", value);
+        } catch (Exception ignore) {
+            return false;
+        }
+        return true;
+    }
+
 //    @Override
 //    public int compareTo(@NonNull Variable o) {
 //        return name.compareTo(o.name);

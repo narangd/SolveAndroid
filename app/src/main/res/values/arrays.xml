@@ -10,7 +10,7 @@
         <!--<item>Float</item>-->
         <item>Float<!--Double--></item>
         <item>Boolean</item>
-        <item>Object</item>
+        <!--<item>Object</item>-->
     </string-array>
     <string-array name="type_example">
         <!--<item>127</item>-->
